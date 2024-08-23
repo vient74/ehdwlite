@@ -16,9 +16,9 @@ class ProvinsiController extends Controller
         $max_data = 10;
         $query = request('query');
         if (request('query')) {
-            $provincies = Provinsi::indexKabupatenSearch($max_data, $query); 
+            $provincies = Provinsi::indexProvinsiSearch($max_data, $query); 
         } else {
-            $provincies = Provinsi::indexKabupaten($max_data); 
+            $provincies = Provinsi::indexProvinsi($max_data); 
         }    
 
         return view('provinsi.index', compact('provincies'));
