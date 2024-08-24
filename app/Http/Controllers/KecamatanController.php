@@ -123,20 +123,26 @@ class KecamatanController extends Controller
 
         // cari provinsi
         $provinsi = DB::table('master.master_provinsi')
-                ->where(DB::raw("left(id::text, 2)"), '=', DB::raw("left('". $id ."', 2)"))
+                ->where(DB::raw("left(id::text, 2)"), '=', DB::raw("left('". $request->id ."', 2)"))
                 ->first();
 
-        // dd( $provinsi->name);
+        //dd( $provinsi->name);
 
         $kabupaten = DB::table('master.master_kab_kota')
-                    ->where(DB::raw("left(id::text, 4)"), '=', DB::raw("left('". $id ."', 4)"))
+                    ->where(DB::raw("left(id::text, 4)"), '=', DB::raw("left('". $request->id ."', 4)"))
                     ->first();
+
+        // dd( $kabupaten->name);            
                 
         $kecamatan = DB::table('master.master_kecamatan')
            ->where('id', $request->kode_area_lama)
            ->first();
 
+        //dd( $request->name);
+
         $long_name =  'KECAMATAN ' . $request->name. ', '. $kabupaten->name . ', PROVINSI '. $provinsi->name;     
+
+        // dd( $long_name );
 
         if ($kecamatan) {
             DB::beginTransaction();
