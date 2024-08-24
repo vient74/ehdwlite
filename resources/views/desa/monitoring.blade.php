@@ -42,6 +42,8 @@
                                     <th scope="col">Info Lengkap</th>
                                     <th scope="col" class="text-end">Jumlah User</th>
                                     <th scope="col" class="text-end">Jumlah User KPM</th>
+                                    <th scope="col" class="text-end">Jumlah KK</th>
+                                    <th scope="col" class="text-end">Jumlah Sasaran(NIK)</th>
                                     <th scope="col" class="text-center">Updated</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
@@ -54,6 +56,8 @@
                                     <td>{{ $data->long_name }}</td>
                                     <td class="text-end">{{ $data->jumlah_user }}</td>
                                     <td class="text-end">{{ $data->jumlah_kpm }}</td>
+                                    <td class="text-end">{{ $data->jumlah_kk }}</td>
+                                    <td class="text-end">{{ $data->jumlah_sasaran }}</td>
                                     <td class="text-center">{{ $data->updated_at ? \Carbon\Carbon::parse($data->updated_at)->format('d-m-Y') : 'N/A' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('desa.edit', $data->id) }}" class="btn btn-sm btn-primary">EDIT</a>

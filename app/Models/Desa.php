@@ -65,12 +65,8 @@ class Desa extends Model
                 'master.master_desa.long_name',
                 'master.master_desa.updated_at',
                 DB::raw('COUNT(DISTINCT master.master_kpm.id) AS jumlah_kpm'),
-                DB::raw('COUNT(DISTINCT master.master_user.id) AS jumlah_user'),
-                DB::raw('COUNT(DISTINCT master.master_meta_kk.kk) AS jumlah_kk'),
-                DB::raw('COUNT(DISTINCT master.master_meta_sasaran.nik) AS jumlah_sasaran')
+                DB::raw('COUNT(DISTINCT master.master_user.id) AS jumlah_user')
             )
-            ->leftJoin('master.master_meta_kk', 'master.master_desa.id', '=', 'master.master_meta_kk.desa_id')
-            ->leftJoin('master.master_meta_sasaran', 'master.master_desa.id', '=', 'master.master_meta_sasaran.desa_id')
             ->leftJoin('master.master_user', 'master.master_desa.id', '=', 'master.master_user.desa_id')
             ->leftJoin('master.master_kpm', 'master.master_desa.id', '=', 'master.master_kpm.desa_id')
             ->groupBy('master.master_desa.id', 'master.master_desa.name', 'master.master_desa.long_name');
@@ -94,12 +90,10 @@ class Desa extends Model
                            master.master_desa.long_name,
                            master.master_desa.updated_at,
                            COUNT(DISTINCT master.master_kpm.id)     AS jumlah_kpm,
-                           COUNT(DISTINCT master.master_user.id)    AS jumlah_user,
-                           COUNT(DISTINCT master.master_meta_kk.kk) AS jumlah_kk,
-                           COUNT(DISTINCT master.master_meta_sasaran.nik) AS jumlah_sasaran
+                           COUNT(DISTINCT master.master_user.id)    AS jumlah_user
+                           
                       FROM master.master_desa
-                 LEFT JOIN master.master_meta_kk      ON master.master_desa.id = master.master_meta_kk.desa_id
-                 LEFT JOIN master.master_meta_sasaran ON master.master_desa.id = master.master_meta_sasaran.desa_id
+             
                  LEFT JOIN master.master_user ON master.master_user.desa_id = master.master_desa.id
                  LEFT JOIN master.master_kpm  ON master.master_kpm.desa_id  = master.master_desa.id
                   GROUP BY master.master_desa.id, master.master_desa.name, master.master_desa.long_name
