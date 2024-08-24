@@ -29,11 +29,10 @@ class UserController extends Controller
             } elseif (Auth::user()->role->tag == 'admin_kabkota') {
                 $usersQuery->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
             }
-            $users = $usersQuery->where('name', 'like', '%' . $query . '%')
+            $users = $usersQuery->where(DB::raw('UPPER(name)'), 'like', '%' . strtoupper($query) . '%')
                                 ->orWhere('username', 'like', '%' . $query . '%')
                                 ->orderBy('id', 'ASC')
-                                ->cursorPaginate($max_data);        
-
+                                ->cursorPaginate($max_data);
         } else {
             $usersQuery = User::select('*');
             if (Auth::user()->role->tag == 'admin_prov') {
@@ -62,6 +61,7 @@ class UserController extends Controller
 
         return view('user.index', compact('users', 'lastid', 'jumlahuser'));
     }
+
 
 
   
