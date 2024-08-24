@@ -65,7 +65,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="text-center text-muted" colspan="8">Data kecamatan tidak tersedia</td>
+                                    <td class="text-center text-muted" colspan="9">Data kecamatan tidak tersedia</td>
                                 </tr>
                             @endforelse
                             </tbody>

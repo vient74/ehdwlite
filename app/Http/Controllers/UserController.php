@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
  
@@ -21,24 +22,39 @@ class UserController extends Controller
         $max_data = 10;
         $query = request('query');
 
-        if (request('query')) {
-            $users = User::where('name', 'like', '%' . $query . '%')
-                    ->orWhere('username', 'like', '%' . $query . '%')
-                    ->orWhere('desa_id', '=', '' . $query . '')
-                    ->cursorPaginate($max_data)
-                    ->withQueryString();
+        if ($query) {
+            $usersQuery = User::select('*');
+            if (Auth::user()->role->tag == 'admin_prov') {
+                $usersQuery->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+            }
+            $users = $usersQuery->where('name', 'like', '%' . $query . '%')
+                                ->orWhere('username', 'like', '%' . $query . '%')
+                                ->orderBy('id', 'ASC')
+                                ->cursorPaginate($max_data);        
+
         } else {
-            $users = User::orderBy('id', 'ASC')->cursorPaginate($max_data);  
-        }    
+            $usersQuery = User::select('*');
+            if (Auth::user()->role->tag == 'admin_prov') {
+                $usersQuery->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+            }
+            $users = $usersQuery->orderBy('id', 'ASC')->cursorPaginate($max_data);
+        }
 
-        $lastid = User::orderBy('id', 'DESC') 
-            ->limit(5)  
-            ->get();
+        $usersQueryJml = User::select('*');
+        if (Auth::user()->role->tag == 'admin_prov') {
+            $usersQueryJml->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+        }        
+        $lastid = $usersQueryJml->orderBy('id', 'DESC')->limit(5)->get();
 
-        $jumlahuser = DB::table('master.master_user')->count();
+        $usersQueryJmlLast = DB::table('master.master_user');
+        if (Auth::user()->role->tag == 'admin_prov') {
+            $usersQueryJmlLast->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+        } 
+         $jumlahuser = $usersQueryJmlLast->count();
 
         return view('user.index', compact('users', 'lastid', 'jumlahuser'));
     }
+
 
   
     /**

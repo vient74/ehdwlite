@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kabupaten;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -104,24 +105,37 @@ class KabupatenController extends Controller
             'long_name' => 'required|string'
         ]);
 
+        // cari provinsi
+        $provinsi = DB::table('master.master_provinsi')
+                ->where(DB::raw("left(id::text, 2)"), '=', DB::raw("left('". $id ."', 2)"))
+                ->first();
+
+        // dd( $provinsi->name);
 
         $kabupaten = DB::table('master.master_kab_kota')
                     ->where('id', $request->kode_area_lama)
                     ->first();
+                
+        $long_name =  $request->name. ', '. $provinsi->name;           
 
         if ($kabupaten) {
-            DB::table('master.master_kab_kota')
-                ->where('id', $request->kode_area_lama)
-                ->update([
-                    'id' => $request->id,
-                    'kode_bps' => $request->kode_bps,
-                    'name' => $request->name,
-                    'long_name' => $request->long_name,
-                    'updated_at' => now(),
-                ]);
-
-        return redirect()->route('kabupaten.edit', $request->id)->with('message', 'Kabupaten updated successfully !');
-
+            DB::beginTransaction();
+            try {    
+                DB::table('master.master_kab_kota')
+                    ->where('id', $request->kode_area_lama)
+                    ->update([
+                        'id' => $request->id,
+                        'kode_bps' => $request->kode_bps,
+                        'name' => $request->name,
+                        'long_name' => $long_name,
+                        'updated_at' => now(),
+                    ]);
+                DB::commit();    
+                return redirect()->route('kabupaten.edit', $request->id)->with('message', 'Kabupaten updated successfully !');
+            } catch (QueryException $e) {
+                DB::rollBack();
+                return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.'])->withInput();
+            }
         }
     }    
 }

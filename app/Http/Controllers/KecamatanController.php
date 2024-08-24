@@ -121,23 +121,43 @@ class KecamatanController extends Controller
             'long_name' => 'required|string'
         ]);
 
+        // cari provinsi
+        $provinsi = DB::table('master.master_provinsi')
+                ->where(DB::raw("left(id::text, 2)"), '=', DB::raw("left('". $id ."', 2)"))
+                ->first();
 
-         $kecamatan = DB::table('master.master_kecamatan')
+        // dd( $provinsi->name);
+
+        $kabupaten = DB::table('master.master_kab_kota')
+                    ->where(DB::raw("left(id::text, 4)"), '=', DB::raw("left('". $id ."', 4)"))
+                    ->first();
+                
+        $kecamatan = DB::table('master.master_kecamatan')
            ->where('id', $request->kode_area_lama)
            ->first();
 
-        if ($kecamatan) {
-            DB::table('master.master_kecamatan')
-                ->where('id', $request->kode_area_lama)
-                ->update([
-                    'id' => $request->id,
-                    'kode_bps' => $request->kode_bps,
-                    'name' => $request->name,
-                    'long_name' => $request->long_name,
-                    'updated_at' => now(),
-                ]);
+        $long_name =  'KECAMATAN ' . $request->name. ', '. $kabupaten->name . ', PROVINSI '. $provinsi->name;     
 
-        return redirect()->route('kecamatan.edit', $request->id)->with('message', 'kecamatan updated successfully !');
+        if ($kecamatan) {
+            DB::beginTransaction();
+            try { 
+                DB::table('master.master_kecamatan')
+                    ->where('id', $request->kode_area_lama)
+                    ->update([
+                        'id' => $request->id,
+                        'kode_bps' => $request->kode_bps,
+                        'name' => $request->name,
+                        'long_name' => $long_name,
+                        'updated_at' => now(),
+                    ]);
+                DB::commit();       
+                return redirect()->route('kecamatan.edit', $request->id)->with('message', 'kecamatan updated successfully !');
+
+            } catch (QueryException $e) {
+                DB::rollBack();
+                return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.'])->withInput();
+            }
+            
         }
 
     }

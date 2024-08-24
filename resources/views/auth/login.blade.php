@@ -4,9 +4,17 @@
 <div class="container">
     <div class="row justify-content-center" style="margin-top: 100px">
         <div class="col-md-5">
+              @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
+                
+
+                  
                 <div class="card-body">
                    
                     <form action="{{ route('actionlogin') }}" method="post">
@@ -16,13 +24,16 @@
                             <label for="username" class="col-md-4 col-form-label text-md-end">{{ __('Username') }}</label>
 
                             <div class="col-md-6">
-                                <input id="username" type="username" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="email" autofocus>
+                                  <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required>
+                                    
 
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+
+                              
                             </div>
                         </div>
 
@@ -30,8 +41,9 @@
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
 
+                                
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -40,17 +52,7 @@
                             </div>
                         </div>
 
-                        <div class="row mb-2">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                      
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
@@ -65,7 +67,9 @@
                                 @endif
                             </div>
                         </div>
+                         
                     </form>
+                     <p style="margin-top: 20px">version 1.0</p>
                 </div>
             </div>
         </div>

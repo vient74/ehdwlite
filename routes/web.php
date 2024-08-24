@@ -39,27 +39,25 @@ Route::get('/layanan_anak/show_layanan/{id}', [LayananAnakController::class, 'sh
 Route::get('/layanan_remaja_putri/show_layanan/{id}', [LayananRemajaPutriController::class, 'showLayananIndividu'])->name('layanan_remaja_putri.show_layanan')->middleware('auth');
 Route::get('/layanan_catin/show_layanan/{id}', [LayananCatinController::class, 'showLayananIndividu'])->name('layanan_catin.show_layanan')->middleware('auth');
 
-
 // penerim manfaat
 Route::get('/pmanak', [PmAnakController::class, 'index'])->name('pmanak.index')->middleware('auth');
 Route::get('/pmremaja_putri', [PmRemajaPutriController::class, 'index'])->name('pmremaja_putri.index')->middleware('auth');
 Route::get('/pmcatin', [PmCatinController::class, 'index'])->name('pmcatin.index')->middleware('auth');
 Route::get('/pmibu_hamil', [PmIbuHamilNifasController::class, 'index'])->name('pmibu_hamil.index')->middleware('auth');
 
-// role
-Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8'])->group(function () 
-{
+
+Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8,3ac13019-aa8b-4c41-9c8e-c0c90cb6bbc0'])->group(function () {
+  
+// Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8,6232cba3-53d4-4ee1-aa5c-92e557a6932a'])->group(function () {
     // Master KK
     Route::get('/masterkk', [MasterKkController::class, 'index'])->name('masterkk.index');
-    Route::get('/masterkk/create', [MasterKkController::class, 'index'])->name('masterkk.create');
-    Route::get('/masterkk/edit', [MasterKkController::class, 'index'])->name('masterkk.edit');
+    Route::get('/masterkk/create', [MasterKkController::class, 'create'])->name('masterkk.create');
+    Route::get('/masterkk/edit', [MasterKkController::class, 'edit'])->name('masterkk.edit');
     Route::get('/masterkk/inputbykpm', [MasterKkController::class, 'inputByKpm'])->name('masterkk.inputbykpm');
 
+    // Other routes
     Route::get('/mastersasaran', [MasterSasaranController::class, 'index'])->name('mastersasaran.index');
     Route::get('/mastersasaran/inputbykpm', [MasterSasaranController::class, 'inputByKpm'])->name('mastersasaran.inputbykpm');
-
-  
-    // User
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
     Route::post('/user', [UserController::class, 'store'])->name('user.store');
@@ -67,37 +65,34 @@ Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8'])->group(
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
     Route::get('/user/editpassword/{id}', [UserController::class, 'editpassword'])->name('user.editpassword');
     Route::put('/user/updatepassword/{id}', [UserController::class, 'updatepassword'])->name('user.updatepassword');
-   
     Route::get('/kpm', [KpmController::class, 'index'])->name('kpm.index');
     Route::get('/kpm/create', [KpmController::class, 'create'])->name('kpm.create');
     Route::get('/kpm/edit/{id}', [KpmController::class, 'edit'])->name('kpm.edit');
     Route::put('/kpm/{id}', [KpmController::class, 'update'])->name('kpm.update');
-    
+
     Route::get('/provinsi', [ProvinsiController::class, 'index'])->name('provinsi.index');
+    
     Route::get('/provinsi/create', [ProvinsiController::class, 'create'])->name('provinsi.create');
     Route::post('/provinsi', [ProvinsiController::class, 'store'])->name('provinsi.store');
     Route::get('/provinsi/edit/{id}', [ProvinsiController::class, 'edit'])->name('provinsi.edit');
     Route::put('/provinsi/{id}', [ProvinsiController::class, 'update'])->name('provinsi.update');
-
     Route::get('/kabupaten', [KabupatenController::class, 'index'])->name('kabupaten.index');
     Route::get('/kabupaten/create', [KabupatenController::class, 'create'])->name('kabupaten.create');
     Route::post('/kabupaten', [KabupatenController::class, 'store'])->name('kabupaten.store');
     Route::get('/kabupaten/edit/{id}', [KabupatenController::class, 'edit'])->name('kabupaten.edit');
     Route::put('/kabupaten/{id}', [KabupatenController::class, 'update'])->name('kabupaten.update');
-
     Route::get('/kecamatan', [KecamatanController::class, 'index'])->name('kecamatan.index');
     Route::get('/kecamatan/create', [KecamatanController::class, 'create'])->name('kecamatan.create');
     Route::post('/kecamatan', [KecamatanController::class, 'store'])->name('kecamatan.store');
     Route::get('/kecamatan/edit/{id}', [KecamatanController::class, 'edit'])->name('kecamatan.edit');
     Route::put('/kecamatan/{id}', [KecamatanController::class, 'update'])->name('kecamatan.update');
-
     Route::get('/desa/autodesa', [DesaController::class, 'autodesa'])->name('desa.autodesa');
     Route::get('/desa', [DesaController::class, 'index'])->name('desa.index');
     Route::get('/desa/create', [DesaController::class, 'create'])->name('desa.create');
     Route::post('/desa', [DesaController::class, 'store'])->name('desa.store');
     Route::get('/desa/edit/{id}', [DesaController::class, 'edit'])->name('desa.edit');
     Route::put('/desa/{id}', [DesaController::class, 'update'])->name('desa.update');
-
 });
+
 
 Route::get('/forbidden', function () { return view('errors.403');  })->name('forbidden');

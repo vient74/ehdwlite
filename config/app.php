@@ -123,4 +123,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'middleware' => [
+        'web' => [
+            // Other web middleware
+            \App\Http\Middleware\RoleCheckMiddleware::class,
+        ],
+        'api' => [
+            // Other API middleware
+        ],
+    ],
+
 ];

@@ -6,6 +6,7 @@ use App\Models\Kpm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class KpmController extends Controller
 {
@@ -29,18 +30,22 @@ class KpmController extends Controller
                     ->withQueryString();
                     
         } else {
-            $kpms = Kpm::select('master.master_kpm.id','nik','master.master_kpm.name','username','email','nomor_telpon','desa_id', 
-                                'master.master_desa.name as desa' ,'status','master_kpm.updated_at')
-                    ->join('master.master_desa','master.master_desa.id','=','master.master_kpm.desa_id')
-                    ->orderBy('master.master_kpm.id', 'ASC')
-                    ->cursorPaginate($max_data);  
+            $kpms = Kpm::indexKpm($max_data);
         }    
 
-        $lastid = Kpm::orderBy('id', 'DESC') 
-            ->limit(5)  
-            ->get();
+        $lastid = Kpm::select('*');
+                  if (Auth::user()->role->tag == 'admin_prov') {
+                      $lastid->where(DB::raw('substring(master.master_kpm.desa_id, 1, 2)'), '=', Auth::user()->provinsi_id);
+                  }
+                  $lastid->orderBy('id', 'DESC')->limit(5)->get();
 
-        $jumlahkpm = DB::table('master.master_kpm')->count();
+        $jmlkpm = DB::table('master.master_kpm');
+                  if (Auth::user()->role->tag == 'admin_prov') {
+                     $jmlkpm->where(DB::raw('substring(master.master_kpm.desa_id, 1, 2)'), '=', Auth::user()->provinsi_id);
+                  }
+
+        $jumlahkpm = $jmlkpm->count();
+
         return view('kpm.index', compact('kpms', 'lastid', 'jumlahkpm'));
     }
     

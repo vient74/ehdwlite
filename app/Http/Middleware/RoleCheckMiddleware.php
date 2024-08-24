@@ -6,18 +6,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RoleCheckMiddleware
+class RoleCheckMiddlewares
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        // Ganti dengan ID role yang ingin Anda periksa
-        $requiredRoleId = 'acf6f46d-1c53-4e4a-8e35-92fa21e20fc8';
-     
-
-        if (Auth::check() && Auth::user()->role_id === $requiredRoleId) {
+        // Ambil role ID pengguna yang sedang login
+        $userRole = Auth::check() ? Auth::user()->role_id : null;
+ 
+        // Periksa jika role ID pengguna cocok dengan salah satu role yang dibutuhkan
+        if ($userRole && in_array($userRole, $roles)) {
             return $next($request);
         }
 
-        return redirect()->route('forbidden'); 
+        // Jika tidak memenuhi syarat, alihkan ke halaman forbidden
+        return redirect()->route('forbidden');
     }
 }

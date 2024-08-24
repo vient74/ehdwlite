@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use App\Models\SchemaScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Provinsi extends Model
@@ -48,42 +49,57 @@ class Provinsi extends Model
 
     protected function indexProvinsi($max_data)
     {
-        return Provinsi::select(
-                'master.master_provinsi.id',
-                'master.master_provinsi.kode_bps',
-                'master.master_provinsi.name',
-                    DB::raw('count(distinct master.master_kab_kota.id) as kabupaten'),
-                    DB::raw('count(distinct master.master_user.id) as jumlah_user'),
-                'master.master_provinsi.updated_at',
-                )
-               
-                ->join('master.master_kab_kota', DB::raw("left(master.master_kab_kota.id, 2)"), '=',  'master.master_provinsi.id')
-                ->leftJoin('master.master_user', 'master.master_user.provinsi_id', '=', 'master.master_provinsi.id')
-                ->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
-                ->orderBy('master.master_provinsi.id', 'ASC')
-                ->paginate($max_data);
-                            
+        $sql = Provinsi::select(
+               'master.master_provinsi.id',
+               'master.master_provinsi.kode_bps',
+               'master.master_provinsi.name',
+                DB::raw('count(distinct master.master_kab_kota.id) as kabupaten'),
+                DB::raw('count(distinct master.master_user.id) as jumlah_user'),
+                'master.master_provinsi.updated_at'
+            )
+            ->join('master.master_kab_kota', DB::raw("left(master.master_kab_kota.id, 2)"), '=', 'master.master_provinsi.id')
+            ->leftJoin('master.master_user', 'master.master_user.provinsi_id', '=', 'master.master_provinsi.id');
+
+        if (Auth::user()->role->tag == 'admin_prov') {
+            $sql->where('master.master_provinsi.id', '=', Auth::user()->provinsi_id);
+        }
+
+        $data = $sql->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
+                    ->orderBy('master.master_provinsi.id', 'ASC')
+                    ->paginate($max_data);
+
+        return $data;
     }
+
 
     protected function indexProvinsiSearch($max_data, $query)
     {
-        return  Provinsi::select(
-                'master.master_provinsi.id',
-                'master.master_provinsi.kode_bps',
-                'master.master_provinsi.name',
-                    DB::raw('count(distinct master.master_kab_kota.id) as kabupaten'),
-                    DB::raw('count(distinct master.master_user.id) as jumlah_user'),
-                'master.master_provinsi.updated_at',
-                )
-                ->leftJoin('master.master_kab_kota', DB::raw("left(master.master_kab_kota.id, 2)"), '=',  'master.master_provinsi.id')
-                ->leftJoin('master.master_user', 'master.master_user.provinsi_id', '=', 'master.master_provinsi.id')
-                ->where('master_provinsi.name', 'like', '%' . $query .'%')
-                ->orWhere('master_provinsi.id', '=', '' . $query .'')
-                ->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
-                ->orderBy('master.master_provinsi.id', 'ASC')
-                ->paginate($max_data)
-                ->withQueryString();
-                            
+        $query = strtoupper($query);
+        
+        $sql = Provinsi::select(
+               'master.master_provinsi.id',
+               'master.master_provinsi.kode_bps',
+               'master.master_provinsi.name',
+                DB::raw('count(distinct master.master_kab_kota.id) as kabupaten'),
+                DB::raw('count(distinct master.master_user.id) as jumlah_user'),
+                'master.master_provinsi.updated_at'
+            )
+            ->join('master.master_kab_kota', DB::raw("left(master.master_kab_kota.id, 2)"), '=', 'master.master_provinsi.id')
+            ->leftJoin('master.master_user', 'master.master_user.provinsi_id', '=', 'master.master_provinsi.id');
+
+        if (Auth::user()->role->tag == 'admin_prov') {
+            $sql->where('master.master_provinsi.id', '=', Auth::user()->provinsi_id);
+        }
+
+        $data = $sql->where('master_provinsi.name', 'like', '%' . $query .'%')
+                     ->orWhere('master_provinsi.id', '=', '' . $query .'')
+                     ->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
+                     ->orderBy('master.master_provinsi.id', 'ASC')
+                     ->paginate($max_data)
+                     ->withQueryString();
+
+        return $data;
+              
     }
 
 }

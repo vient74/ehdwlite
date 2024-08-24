@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SchemaScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -57,79 +58,67 @@ class Desa extends Model
 
     protected function indexDesa($max_data)
     {
-
-        
-        // $desas = DB::table('master.master_desa')
-        //         ->join('master.master_meta_kk', 'master.master_desa.id', '=', 'master.master_meta_kk.desa_id')
-        //         ->join('master.master_meta_sasaran', 'master.master_desa.id', '=', 'master.master_meta_sasaran.desa_id')
-        //         ->join('master.master_user', 'master.master_user.desa_id', '=', 'master.master_desa.id')
-        //         ->join('master.master_kpm', 'master.master_kpm.desa_id', '=', 'master.master_desa.id')
-        //         ->select(
-        //             'master.master_desa.id',
-        //             'master.master_desa.name',
-        //             'master.master_desa.long_name',
-        //             'master.master_desa.updated_at',
-        //             DB::raw('count(distinct master.master_kpm.id) as jumlah_kpm'),
-        //             DB::raw('count(distinct master.master_user.id) as jumlah_user'),
-        //             DB::raw('count(distinct master.master_meta_kk.kk) as jumlah_kk'),
-        //             DB::raw('count(distinct master.master_meta_sasaran.nik) as jumlah_sasaran')
-        //         )
-        //         ->groupBy('master.master_desa.id', 'master.master_desa.name', 'master.master_desa.long_name')
-        //         ->orderBy('master.master_desa.id', 'ASC')
-        //         ->cursorPaginate($max_data);
-      
-        // return $desas;
-
-        $desas = DB::table(DB::raw('(
+        $sql = DB::table(DB::raw('(
                     SELECT 
-                        master.master_desa.id,
-                        master.master_desa.name,
-                        master.master_desa.long_name,
-                        master.master_desa.updated_at,
-                        COUNT(DISTINCT master.master_kpm.id) AS jumlah_kpm,
-                        COUNT(DISTINCT master.master_user.id) AS jumlah_user,
-                        COUNT(DISTINCT master.master_meta_kk.kk) AS jumlah_kk,
-                        COUNT(DISTINCT master.master_meta_sasaran.nik) AS jumlah_sasaran
-                    FROM master.master_desa
-                    LEFT JOIN master.master_meta_kk ON master.master_desa.id = master.master_meta_kk.desa_id
-                    LEFT JOIN master.master_meta_sasaran ON master.master_desa.id = master.master_meta_sasaran.desa_id
-                    JOIN master.master_user ON master.master_user.desa_id = master.master_desa.id
-                    JOIN master.master_kpm ON master.master_kpm.desa_id = master.master_desa.id
-                    GROUP BY master.master_desa.id, master.master_desa.name, master.master_desa.long_name
-                ) AS subquery'))
-                ->orderBy('id', 'ASC')
-                ->cursorPaginate($max_data);
+                           master.master_desa.id,
+                           master.master_desa.name,
+                           master.master_desa.long_name,
+                           master.master_desa.updated_at,
+                           COUNT(DISTINCT master.master_kpm.id) AS jumlah_kpm,
+                           COUNT(DISTINCT master.master_user.id) AS jumlah_user,
+                           COUNT(DISTINCT master.master_meta_kk.kk) AS jumlah_kk,
+                           COUNT(DISTINCT master.master_meta_sasaran.nik) AS jumlah_sasaran
+                      FROM master.master_desa
+                 LEFT JOIN master.master_meta_kk      ON master.master_desa.id = master.master_meta_kk.desa_id
+                 LEFT JOIN master.master_meta_sasaran ON master.master_desa.id = master.master_meta_sasaran.desa_id
+                 LEFT JOIN master.master_user ON master.master_user.desa_id = master.master_desa.id
+                 LEFT JOIN master.master_kpm  ON master.master_kpm.desa_id  = master.master_desa.id
+                  GROUP BY master.master_desa.id, master.master_desa.name, master.master_desa.long_name
+                ) AS subquery'));
 
+                if (Auth::user()->role->tag == 'admin_prov') {
+                    $sql->where(DB::raw("left(subquery.id, 2)"), '=', Auth::user()->provinsi_id);
+                }
+
+                $desas = $sql->orderBy('id', 'ASC')
+                             ->cursorPaginate($max_data);
         return $desas;
     }
 
-    
-    protected function indexDesaSearch($query,$max_data)
+    protected function indexDesaSearch($query, $max_data)
     {
-        $desas = DB::table('master.master_desa')
-                    ->leftJoin('master.master_meta_kk', 'master.master_desa.id', '=', 'master.master_meta_kk.desa_id')
-                    ->leftJoin('master.master_meta_sasaran', 'master.master_desa.id', '=', 'master.master_meta_sasaran.desa_id')
-                    ->leftJoin('master.master_user', 'master.master_user.desa_id', '=', 'master.master_desa.id')
-                    ->leftJoin('master.master_kpm', 'master.master_kpm.desa_id', '=', 'master.master_desa.id')
-                    ->select(
-                        'master.master_desa.id',
-                        'master.master_desa.name',
-                        'master.master_desa.long_name',
-                        'master.master_desa.updated_at',
-                         DB::raw('count(distinct master.master_kpm.id) as jumlah_kpm'),
-                         DB::raw('count(distinct master.master_user.id) as jumlah_user'),
-                         DB::raw('count(distinct master.master_meta_kk.kk) as jumlah_kk'),
-                         DB::raw('count(distinct master.master_meta_sasaran.nik) as jumlah_sasaran')
-                    )
-                    ->where("master.master_desa.name", 'like', '%' . $query . '%')
-                    //->where("master.master_desa.name", '=', $query)
+        $sql = DB::table(DB::raw('(
+                    SELECT 
+                           master.master_desa.id,
+                           master.master_desa.name,
+                           master.master_desa.long_name,
+                           master.master_desa.updated_at,
+                           COUNT(DISTINCT master.master_kpm.id)     AS jumlah_kpm,
+                           COUNT(DISTINCT master.master_user.id)    AS jumlah_user,
+                           COUNT(DISTINCT master.master_meta_kk.kk) AS jumlah_kk,
+                           COUNT(DISTINCT master.master_meta_sasaran.nik) AS jumlah_sasaran
+                      FROM master.master_desa
+                 LEFT JOIN master.master_meta_kk      ON master.master_desa.id = master.master_meta_kk.desa_id
+                 LEFT JOIN master.master_meta_sasaran ON master.master_desa.id = master.master_meta_sasaran.desa_id
+                 LEFT JOIN master.master_user ON master.master_user.desa_id = master.master_desa.id
+                 LEFT JOIN master.master_kpm  ON master.master_kpm.desa_id  = master.master_desa.id
+                  GROUP BY master.master_desa.id, master.master_desa.name, master.master_desa.long_name
+                ) AS subquery'));
+
+                if (Auth::user()->role->tag == 'admin_prov') {
+                   // $sql->where(DB::raw("left(subquery.id, 2)"), '=', Auth::user()->provinsi_id);
+                   // $sql->where(DB::raw("subquery.id"), 'like', Auth::user()->provinsi_id . '%');
+                   $sql->where(DB::raw('substring(subquery.id, 1, 2)'), '=', Auth::user()->provinsi_id);
+                }
+
+                $sql->where("subquery.name", 'like', '%' . $query . '%')
                     ->orWhere('long_name', 'like', '%' . $query . '%')
-                    ->orWhere('master.master_desa.id', $query)
-                    ->groupBy('master.master_desa.id', 'master.master_desa.name', 'master.master_desa.long_name')
-                    ->orderBy('master.master_desa.id', 'ASC')
-                    ->cursorPaginate($max_data);
+                    ->orWhere('subquery.id', $query);
 
-        return $desas;            
-
+                $desas = $sql->orderBy('id', 'ASC')
+                             ->cursorPaginate($max_data);
+        return $desas;
     }
+
+ 
 }

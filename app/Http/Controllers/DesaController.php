@@ -11,6 +11,7 @@ use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class DesaController extends Controller
 {
@@ -28,7 +29,11 @@ class DesaController extends Controller
             $desas = Desa::indexDesa($max_data);
         }  
 
-        $jumlahDesa = DB::table('master.master_desa')->count(); 
+        if (Auth::user()->role->tag == 'admin_prov') {
+            $jumlahDesa = DB::table('master.master_desa')->where(DB::raw('substring(master_desa.id, 1, 2)'), '=', Auth::user()->provinsi_id)->count(); 
+        } else {    
+            $jumlahDesa = DB::table('master.master_desa')->count(); 
+        }
  
         return view('desa.index', compact('desas','jumlahDesa'));
     }
@@ -68,13 +73,28 @@ class DesaController extends Controller
             'long_name' => 'required|string'
         ]);
 
+         // cari provinsi
+        $provinsi = DB::table('master.master_provinsi')
+                ->where(DB::raw("left(id::text, 2)"), '=', DB::raw("left('". $request->id ."', 2)"))
+                ->first();
+
+        $kabupaten = DB::table('master.master_kab_kota')
+                    ->where(DB::raw("left(id::text, 4)"), '=', DB::raw("left('". $request->id ."', 4)"))
+                    ->first();
+ 
+        $kecamatan = DB::table('master.master_kecamatan')
+           ->where(DB::raw("left(id::text, 6)"), '=', DB::raw("left('". $request->id ."', 6)"))
+           ->first();
+   
+        $long_name =  $request->name . ', KECAMATAN ' . $kecamatan->name. ', '. $kabupaten->name . ', PROVINSI '. $provinsi->name;    
+
         DB::beginTransaction();
         try {
             DB::table('master.master_desa')->insert([
                 'id' => $request->id,
                 'kode_bps' => $request->kode_bps,
                 'name' => $request->name,
-                'long_name' => $request->long_name,
+                'long_name' => $long_name,
                 'updated_at' => now()
             ]);
 
@@ -137,23 +157,49 @@ class DesaController extends Controller
             'long_name' => 'required|string'
         ]);
 
+        // cari provinsi
+        $provinsi = DB::table('master.master_provinsi')
+                ->where(DB::raw("left(id::text, 2)"), '=', DB::raw("left('". $request->id ."', 2)"))
+                ->first();
+
+        $kabupaten = DB::table('master.master_kab_kota')
+                    ->where(DB::raw("left(id::text, 4)"), '=', DB::raw("left('". $request->id ."', 4)"))
+                    ->first();
  
+        $kecamatan = DB::table('master.master_kecamatan')
+           ->where(DB::raw("left(id::text, 6)"), '=', DB::raw("left('". $request->id ."', 6)"))
+           ->first();
+
         $desa = DB::table('master.master_desa')
            ->where('id', $request->kode_desa_lama)
            ->first();
 
+        $long_name =  $desa->name . ', KECAMATAN ' . $kecamatan->name. ', '. $kabupaten->name . ', PROVINSI '. $provinsi->name;    
+    
         if ($desa) {
-            DB::table('master.master_desa')
-                ->where('id', $request->kode_desa_lama)
-                ->update([
-                    'id' => $request->id,
-                    'kode_bps' => $request->kode_bps,
-                    'name' => $request->name,
-                    'long_name' => $request->long_name,
-                    'updated_at' => now(),
-                ]);
+            DB::beginTransaction();
+            try {
+                DB::table('master.master_desa')
+                    ->where('id', $request->kode_desa_lama)
+                    ->update([
+                        'id' => $request->id,
+                        'kode_bps' => $request->kode_bps,
+                        'name' => $request->name,
+                        'long_name' => $long_name,
+                        'updated_at' => now(),
+                    ]);
+                DB::commit();
+    
+                return redirect()->route('desa.edit',  $request->id)->with('message', 'Desa updated successfully !');
 
-            return redirect()->route('desa.edit',  $request->id)->with('message', 'Desa updated successfully !');
+            } catch (QueryException $e) {
+                DB::rollBack();
+                if($e->errorInfo[0] == '23505') {
+                    return back()->withErrors(['id' => 'Kode Desa sudah ada.'])->withInput();
+                }
+                return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.'])->withInput();
+            }        
+
         } else {
             return redirect()->back()->with('error', 'Desa dengan kode tersebut tidak ditemukan.');
         }
@@ -239,7 +285,8 @@ class DesaController extends Controller
                         DB::raw('count(distinct master.master_meta_kk.kk) as jumlah_kk'),
                         DB::raw('count(distinct master.master_meta_sasaran.nik) as jumlah_sasaran')
                 )
-                ->where(DB::raw('LEFT(master_desa.id, 6)'), '=', $id)
+                // ->where(DB::raw('LEFT(master_desa.id, 6)'), '=', $id)
+                ->where(DB::raw('substring(master_desa.id, 1, 6)'), '=', $id)
                 ->groupBy('master.master_desa.id', 'master.master_desa.name', 'master.master_desa.long_name')
                 ->orderBy('master.master_desa.id', 'ASC')
                 ->cursorPaginate($max_data);

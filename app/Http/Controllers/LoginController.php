@@ -11,6 +11,7 @@ class LoginController extends Controller
 {
     public function login()
     {
+        
         if (Auth::check()) {
             return redirect('/home');
         }else{
@@ -20,6 +21,11 @@ class LoginController extends Controller
 
     public function actionlogin(Request $request)
     {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+        
         $data = [
             'username' => $request->input('username'),
             'password' => $request->input('password'),

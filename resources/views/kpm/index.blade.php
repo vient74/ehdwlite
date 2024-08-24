@@ -18,7 +18,7 @@
 
                     <div class="row-fluid">
                         <h2>Master Data KPM</h2>
-                        Jumlah akun pengguna {{ $jumlahkpm }} akun 
+                        Jumlah akun KPM {{ htmlspecialchars($jumlahkpm) }} akun 
                         <a href="{{ route('kpm.create') }}" class="btn btn-md btn-primary mb-3 float-end">Tambah</a>
 
                         <!-- Form Pencarian -->
