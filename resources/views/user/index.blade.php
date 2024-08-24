@@ -38,10 +38,10 @@
                                         <th>Name</th>
                                         <th>Username</th>
                                         <th>Role</th>
-                                        <th>Status</th>
+                                        <th class="text-center">Status</th>
                                         <th>Kode Desa</th>
                                         <th class="text-center">Updated At</th>
-                                        <th>Actions</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,12 +59,15 @@
                                             </td>
                                             <td>{{ $data->username }}</td>
                                             <td>{{ $data->role ? $data->role->name : 'Unknown' }}</td>
-                                            <td>
+                                            <td class="text-center">
                                                 <span class="badge {{ $data->status == 1 ? 'bg-success' : 'bg-danger' }}">
                                                     {{ $data->status == 1 ? 'Aktif' : 'Tidak Aktif' }}
                                                 </span>
                                             </td>
-                                             <td>{{ strtoupper($data->desa_id) }}</td>
+                                            <td>
+                                                 {{ $data->desa ? strtoupper($data->desa->name) : 'Desa Tidak Ditemukan' }}<br>
+                                                {{ $data->desa_id }}
+                                            </td>
                                             <td class="text-center">{{ $data->updated_at ? $data->updated_at->format('d-m-Y') : 'N/A' }}</td>
                                             <td class="text-center">
                                                 @if (Auth::user()->role->tag == 'sadmin')

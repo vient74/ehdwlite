@@ -46,9 +46,8 @@ Route::get('/pmcatin', [PmCatinController::class, 'index'])->name('pmcatin.index
 Route::get('/pmibu_hamil', [PmIbuHamilNifasController::class, 'index'])->name('pmibu_hamil.index')->middleware('auth');
 
 
-Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8,3ac13019-aa8b-4c41-9c8e-c0c90cb6bbc0'])->group(function () {
+Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8,3ac13019-aa8b-4c41-9c8e-c0c90cb6bbc0,fa3f2ff4-46d1-4fe9-a7bb-f28fe6cd8b69'])->group(function () {
   
-// Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8,6232cba3-53d4-4ee1-aa5c-92e557a6932a'])->group(function () {
     // Master KK
     Route::get('/masterkk', [MasterKkController::class, 'index'])->name('masterkk.index');
     Route::get('/masterkk/create', [MasterKkController::class, 'create'])->name('masterkk.create');

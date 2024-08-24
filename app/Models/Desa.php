@@ -71,11 +71,13 @@ class Desa extends Model
             ->leftJoin('master.master_kpm', 'master.master_desa.id', '=', 'master.master_kpm.desa_id')
             ->groupBy('master.master_desa.id', 'master.master_desa.name', 'master.master_desa.long_name');
 
-        if (Auth::user()->role->tag == 'admin_prov') {
-            $query->where(DB::raw('LEFT(master.master_desa.id, 2)'), '=', Auth::user()->provinsi_id);
-        }
+            if (Auth::user()->role->tag == 'admin_prov') {
+                $query->where(DB::raw('LEFT(master.master_desa.id, 2)'), '=', Auth::user()->provinsi_id);
+            } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                $query->where(DB::raw("left(master.master_desa.id, 4)"), '=', Auth::user()->kabkot_id);
+            }
 
-        $desas = $query->orderBy('id', 'ASC')->cursorPaginate($max_data);
+            $desas = $query->orderBy('master_desa.id', 'ASC')->cursorPaginate($max_data);
 
         return $desas;             
 
@@ -103,13 +105,15 @@ class Desa extends Model
                    // $sql->where(DB::raw("left(subquery.id, 2)"), '=', Auth::user()->provinsi_id);
                    // $sql->where(DB::raw("subquery.id"), 'like', Auth::user()->provinsi_id . '%');
                    $sql->where(DB::raw('substring(subquery.id, 1, 2)'), '=', Auth::user()->provinsi_id);
+                } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                   $sql->where(DB::raw("left(subquery.id, 4)"), '=', Auth::user()->kabkot_id);
                 }
 
                 $sql->where("subquery.name", 'like', '%' . $query . '%')
                     ->orWhere('long_name', 'like', '%' . $query . '%')
                     ->orWhere('subquery.id', $query);
 
-                $desas = $sql->orderBy('id', 'ASC')
+                $desas = $sql->orderBy('subquery.id', 'ASC')
                              ->cursorPaginate($max_data);
         return $desas;
     }

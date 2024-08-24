@@ -23,6 +23,7 @@
 
                     <div class="row-fluid">
                          <h2>Master Data Kecamatan</h2>
+                          Jumlah Kecamatan yang telah diinput {{ $formattedAngka = number_format($jumlahKec, 0, ',', '.') }} kecamatan
                         <a href="{{ route('kecamatan.create') }}" class="btn btn-md btn-success mb-3 float-end">Tambah</a>
 
                         <!-- Form Pencarian -->

@@ -6,6 +6,7 @@ use App\Models\Kecamatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class KecamatanController extends Controller
 {
@@ -23,7 +24,16 @@ class KecamatanController extends Controller
         } else {
             $kecamatans = Kecamatan::indexKecamatan($max_data);
         }    
-        return view('kecamatan.index', compact('kecamatans'));
+
+        if (Auth::user()->role->tag == 'admin_prov') {
+            $jumlahKec = DB::table('master.master_kecamatan')->where(DB::raw('substring(master_kecamatan.id, 1, 2)'), '=', Auth::user()->provinsi_id)->count(); 
+        } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+            $jumlahKec = DB::table('master.master_kecamatan')->where(DB::raw('substring(master_kecamatan.id, 1, 4)'), '=', Auth::user()->kabkot_id)->count();    
+        } else {    
+            $jumlahKec = DB::table('master.master_kecamatan')->count(); 
+        }
+
+        return view('kecamatan.index', compact('kecamatans', 'jumlahKec'));
     }
 
    /**

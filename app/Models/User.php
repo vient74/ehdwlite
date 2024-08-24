@@ -61,7 +61,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    // Relasi ke desa
     public function desa()
     {
         return $this->belongsTo(Desa::class, 'desa_id');

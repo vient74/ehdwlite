@@ -26,6 +26,8 @@ class UserController extends Controller
             $usersQuery = User::select('*');
             if (Auth::user()->role->tag == 'admin_prov') {
                 $usersQuery->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+            } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                $usersQuery->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
             }
             $users = $usersQuery->where('name', 'like', '%' . $query . '%')
                                 ->orWhere('username', 'like', '%' . $query . '%')
@@ -36,6 +38,8 @@ class UserController extends Controller
             $usersQuery = User::select('*');
             if (Auth::user()->role->tag == 'admin_prov') {
                 $usersQuery->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+            } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                $usersQuery->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
             }
             $users = $usersQuery->orderBy('id', 'ASC')->cursorPaginate($max_data);
         }
@@ -43,14 +47,18 @@ class UserController extends Controller
         $usersQueryJml = User::select('*');
         if (Auth::user()->role->tag == 'admin_prov') {
             $usersQueryJml->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
-        }        
+        } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+            $usersQueryJml->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
+        }       
         $lastid = $usersQueryJml->orderBy('id', 'DESC')->limit(5)->get();
 
         $usersQueryJmlLast = DB::table('master.master_user');
         if (Auth::user()->role->tag == 'admin_prov') {
             $usersQueryJmlLast->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
-        } 
-         $jumlahuser = $usersQueryJmlLast->count();
+        } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+            $usersQueryJmlLast->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
+        }    
+        $jumlahuser = $usersQueryJmlLast->count();
 
         return view('user.index', compact('users', 'lastid', 'jumlahuser'));
     }

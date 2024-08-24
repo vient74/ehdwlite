@@ -31,6 +31,8 @@ class DesaController extends Controller
 
         if (Auth::user()->role->tag == 'admin_prov') {
             $jumlahDesa = DB::table('master.master_desa')->where(DB::raw('substring(master_desa.id, 1, 2)'), '=', Auth::user()->provinsi_id)->count(); 
+        } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+            $jumlahDesa = DB::table('master.master_desa')->where(DB::raw('substring(master_desa.id, 1, 4)'), '=', Auth::user()->kabkot_id)->count();    
         } else {    
             $jumlahDesa = DB::table('master.master_desa')->count(); 
         }

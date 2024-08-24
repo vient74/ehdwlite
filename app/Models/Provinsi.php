@@ -60,13 +60,15 @@ class Provinsi extends Model
             ->join('master.master_kab_kota', DB::raw("left(master.master_kab_kota.id, 2)"), '=', 'master.master_provinsi.id')
             ->leftJoin('master.master_user', 'master.master_user.provinsi_id', '=', 'master.master_provinsi.id');
 
-        if (Auth::user()->role->tag == 'admin_prov') {
-            $sql->where('master.master_provinsi.id', '=', Auth::user()->provinsi_id);
-        }
+            if (Auth::user()->role->tag == 'admin_prov') {
+                $sql->where('master.master_provinsi.id', '=', Auth::user()->provinsi_id);
+            } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                $sql->where("master.master_provinsi.id", '=', DB::raw("left('". Auth::user()->kabkot_id ."', 2)"));
+            }
 
-        $data = $sql->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
-                    ->orderBy('master.master_provinsi.id', 'ASC')
-                    ->paginate($max_data);
+            $data = $sql->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
+                        ->orderBy('master.master_provinsi.id', 'ASC')
+                        ->paginate($max_data);
 
         return $data;
     }
@@ -87,16 +89,18 @@ class Provinsi extends Model
             ->join('master.master_kab_kota', DB::raw("left(master.master_kab_kota.id, 2)"), '=', 'master.master_provinsi.id')
             ->leftJoin('master.master_user', 'master.master_user.provinsi_id', '=', 'master.master_provinsi.id');
 
-        if (Auth::user()->role->tag == 'admin_prov') {
-            $sql->where('master.master_provinsi.id', '=', Auth::user()->provinsi_id);
-        }
+            if (Auth::user()->role->tag == 'admin_prov') {
+                $sql->where('master.master_provinsi.id', '=', Auth::user()->provinsi_id);
+            } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                $sql->where("master.master_provinsi.id", '=', DB::raw("left('". Auth::user()->kabkot_id ."', 2)"));
+            }
 
-        $data = $sql->where('master_provinsi.name', 'like', '%' . $query .'%')
-                     ->orWhere('master_provinsi.id', '=', '' . $query .'')
-                     ->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
-                     ->orderBy('master.master_provinsi.id', 'ASC')
-                     ->paginate($max_data)
-                     ->withQueryString();
+            $data = $sql->where('master_provinsi.name', 'like', '%' . $query .'%')
+                        ->orWhere('master_provinsi.id', '=', '' . $query .'')
+                        ->groupBy('master.master_provinsi.id', 'master.master_provinsi.name')
+                        ->orderBy('master.master_provinsi.id', 'ASC')
+                        ->paginate($max_data)
+                        ->withQueryString();
 
         return $data;
               
