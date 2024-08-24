@@ -63,6 +63,7 @@ class UserController extends Controller
     public function create()
     {
        $roles = Role::select('id as kode', 'name')->get();  
+       
        return view('user.create', compact('roles'));
     }
 

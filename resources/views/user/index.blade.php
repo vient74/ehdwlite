@@ -19,7 +19,9 @@
                     <div class="row-fluid">
                         <h2>Master Data Pengguna</h2>
                         Jumlah akun pengguna {{ $jumlahuser }} akun
-                        <a href="{{ route('user.create') }}" class="btn btn-md btn-primary mb-3 float-end">Tambah</a>
+                        @if (Auth::user()->role->tag == 'sadmin')
+                            <a href="{{ route('user.create') }}" class="btn btn-md btn-primary mb-3 float-end">Tambah</a>
+                        @endif
 
                         <!-- Form Pencarian -->
                         <form action="{{ route('user.index') }}" method="GET" class="mb-4">
@@ -65,7 +67,9 @@
                                              <td>{{ strtoupper($data->desa_id) }}</td>
                                             <td class="text-center">{{ $data->updated_at ? $data->updated_at->format('d-m-Y') : 'N/A' }}</td>
                                             <td class="text-center">
+                                                @if (Auth::user()->role->tag == 'sadmin')
                                                 <a href="{{ route('user.edit', $data->id) }}" class="btn btn-sm btn-warning">EDIT</a>
+                                                @endif
                                                 <a href="{{ route('user.editpassword', $data->id) }}" class="btn btn-sm btn-danger">UBAH PASSWORD</a>
                                             </td>
                                         </tr>
@@ -73,7 +77,7 @@
 
                                     @if($users->isEmpty())
                                         <tr>
-                                            <td class="text-center text-muted" colspan="7">Data Pengguna tidak tersedia</td>
+                                            <td class="text-center text-muted" colspan="8">Data Pengguna tidak tersedia</td>
                                         </tr>
                                     @endif
                                     

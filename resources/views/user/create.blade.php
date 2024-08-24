@@ -27,6 +27,7 @@
                         @csrf
                         @method('POST')
 
+                        @if (Auth::user()->role->tag == 'sadmin')
                           <div class="mb-3">
                                 <label for="role_id">Level Pengguna</label>
                                 <select name="role_id" class="form-select">
@@ -41,6 +42,7 @@
                                 </div>
                                 @enderror
                             </div>
+                     
 
                         <div class="mb-3">
                             <label for="desa_id">Pilih Desa</label>
@@ -51,7 +53,8 @@
                             </div>
                             @enderror
                         </div> 
-                                        
+                                 
+                        @endif 
                          <div class="mb-3">
                             <label for="name">Nama Lengkap</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror"

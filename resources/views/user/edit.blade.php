@@ -36,6 +36,8 @@
                         @csrf
                         @method('PUT')
 
+
+                           @if (Auth::user()->role->tag == 'sadmin')
                            <div class="mb-3">
                             <label for="role_id">Level Pengguna</label>
                             <select name="role_id" class="form-select">
@@ -52,8 +54,13 @@
                             </div>
                             @enderror
                         </div>
+                        @else
+                            <input type="hidden" name='role_id' value="{{ $user->role_id }}">
+                        @endif
 
+                        
 
+                       
                         <div class="mb-3">
                             <label for="desa_id">Pilih Desa</label>
                             <select id="selectDesa" name="desa_id" class="form-select" aria-label="Default select">
@@ -68,6 +75,8 @@
                             </div>
                             @enderror
                         </div>
+                       
+
 
                                         
                          <div class="mb-3">

@@ -19,7 +19,9 @@
                     <div class="row-fluid">
                         <h2>Master Data KPM</h2>
                         Jumlah akun KPM {{ htmlspecialchars($jumlahkpm) }} akun 
+                        @if (Auth::user()->role->tag == 'sadmin')
                         <a href="{{ route('kpm.create') }}" class="btn btn-md btn-primary mb-3 float-end">Tambah</a>
+                        @endif
 
                         <!-- Form Pencarian -->
                         <form action="{{ route('kpm.index') }}" method="GET" class="mb-4">
@@ -80,7 +82,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="text-center text-muted" colspan="9">Data KPM tidak tersedia</td>
+                                    <td class="text-center text-muted" colspan="10">Data KPM tidak tersedia</td>
                                 </tr>
                             @endforelse
 
