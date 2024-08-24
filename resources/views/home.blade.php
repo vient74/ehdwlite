@@ -18,17 +18,9 @@
                    
 
                     <!-- {{ __('You are logged in!') }} -->
-
-                 
-                   
                        
                         @if(Auth::user()->role->tag == 'admin_prov') <!-- prov -->
-                            <div class="row-fluid">
-                                <h3>Monitoring dan Kinerja</h3>
-                                <ul>
-                                    <li><a href="{{ url('/desa') }}">Desa/Kelurahan</a></li>
-                                </ul>    
-                            </div>  
+                             
                             <h3>Master Data</h3>
                             <div class="row-fluid">
                                 <ul>
