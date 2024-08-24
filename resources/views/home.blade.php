@@ -14,11 +14,60 @@
                         </div>
                     @endif
 
+                  
+                   
+
                     <!-- {{ __('You are logged in!') }} -->
 
-                     <h3>Home</h3>
-
-                    <div class="row-fluid">
+                 
+                   
+                       
+                        @if(Auth::user()->role->tag == 'admin_prov') <!-- prov -->
+                            <div class="row-fluid">
+                                <h3>Monitoring dan Kinerja</h3>
+                                <ul>
+                                    <li><a href="{{ url('/desa') }}">Desa/Kelurahan</a></li>
+                                </ul>    
+                            </div>  
+                            <h3>Master Data</h3>
+                            <div class="row-fluid">
+                                <ul>
+                                    <li><a href="{{ url('/user') }}">User ID Pengguna </a></li>
+                                    <li><a href="{{ url('/kpm') }}">User ID KPM </a></li>
+                                    <li><a href="{{ url('/provinsi') }}">Master Provinsi</a></li>
+                                    <li><a href="{{ url('/kabupaten') }}">Master Kabupaten</a></li>
+                                    <li><a href="{{ url('/kecamatan') }}">Master Kecamatan</a></li>
+                                    <li><a href="{{ url('/desa') }}">Master Desa</a></li>
+                                </ul>    
+                            </div>  
+                        @elseif (Auth::user()->role->tag == 'admin_kabkota') <!-- kab -->
+                            <div class="row-fluid">
+                                <ul>
+                                    <li><a href="{{ url('/user') }}">Daftar User ID Pengguna </a></li>
+                                    <li><a href="{{ url('/kabupaten') }}">Master Kabupaten</a></li>
+                                    <li><a href="{{ url('/kecamatan') }}">Master Kecamatan</a></li>
+                                    <li><a href="{{ url('/desa') }}">Master Desa</a></li>
+                                </ul>    
+                            </div>  
+                        @elseif (Auth::user()->role->tag == 'admin_kec') <!-- kec -->    
+                            <div class="row-fluid">
+                                <ul>
+                                    <li><a href="{{ url('/user') }}">Daftar User ID Pengguna </a></li>
+                                    <li><a href="{{ url('/kecamatan') }}">Master Kecamatan</a></li>
+                                    <li><a href="{{ url('/desa') }}">Master Desa</a></li>
+                                </ul>    
+                            </div>  
+                        @elseif (Auth::user()->role == 'admin_desa') <!-- desa -->    
+                            <div class="row-fluid">
+                                <ul>
+                                    <li><a href="{{ url('/user') }}">Daftar User ID Pengguna </a></li>
+                                    <li><a href="{{ url('/kpm') }}">Daftar User ID KPM </a></li>
+                                    <li><a href="{{ url('/desa') }}">Master Desa</a></li>
+                                </ul>    
+                            </div>   
+                        @elseif (Auth::user()->role->tag == 'sadmin')
+                        <h3>Pendataan</h3>    
+                        <div class="row-fluid">
                         <ul>
                             <li><a href="{{ url('/masterkk') }}">Informasi Kepala Keluarga </a></li>
                             <li><a href="{{ url('/mastersasaran') }}">Informasi Sasaran </a></li>
@@ -41,14 +90,19 @@
                       <h3>Master Kode</h3>
                       <div class="row-fluid">
                         <ul>
-                            <li><a href="{{ url('/user') }}">Daftar User ID Pengguna </a></li>
-                            <li><a href="{{ url('/kpm') }}">Daftar User ID KPM </a></li>
+                            <li><a href="{{ url('/user') }}">User ID Pengguna </a></li>
+                            <li><a href="{{ url('/kpm') }}">User ID KPM </a></li>
                             <li><a href="{{ url('/provinsi') }}">Master Provinsi</a></li>
                             <li><a href="{{ url('/kabupaten') }}">Master Kabupaten</a></li>
                             <li><a href="{{ url('/kecamatan') }}">Master Kecamatan</a></li>
                             <li><a href="{{ url('/desa') }}">Master Desa</a></li>
                         </ul>    
-                    </div>    
+                    </div>   
+
+                    @endif
+
+                     
+                 
 
                 </div>
             </div>
