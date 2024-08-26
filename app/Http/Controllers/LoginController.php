@@ -12,7 +12,6 @@ class LoginController extends Controller
     public function login()
     {
         if (Auth::check()) {
-            // return redirect()->intended(route('home'));
             return redirect('/home');
         }else{
             return view('auth/login');
@@ -32,7 +31,6 @@ class LoginController extends Controller
         ];
 
         if (Auth::Attempt($data)) {
-            //return redirect()->intended(route('home'));
             return redirect('home');
         }else{
             Session::flash('error', 'Username atau Password Salah');

@@ -9,8 +9,7 @@ class HighchartController extends Controller
 {
     public function index()
     {
-      
- 
+    
         $usersData = DB::table('master.master_user')
             ->selectRaw('COUNT(*) as count, EXTRACT(MONTH FROM updated_at) as month')
             ->whereRaw('EXTRACT(YEAR FROM updated_at) = ?', [2023])
