@@ -87,40 +87,7 @@
                                 </tbody>
                             </table>
 
-                            <div class="pagination">
-                                @if($users->previousPageUrl())
-                                    @php
-                                        $previousUrl = $users->previousPageUrl();
-                                        // Pastikan URL sudah memiliki port 3000
-                                        if (strpos($previousUrl, ':3000') === false) {
-                                            $parsedUrl = parse_url($previousUrl);
-                                            $previousUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}:3000{$parsedUrl['path']}";
-
-                                            if (isset($parsedUrl['query'])) {
-                                                $previousUrl .= "?{$parsedUrl['query']}";
-                                            }
-                                        }
-                                    @endphp
-                                    <a href="{{ $previousUrl }}" class="btn btn-primary">Previous</a>
-                                @endif
-
-                                @if($users->nextPageUrl())
-                                    @php
-                                        $nextUrl = $users->nextPageUrl();
-                                        // Pastikan URL sudah memiliki port 3000
-                                        if (strpos($nextUrl, ':3000') === false) {
-                                            $parsedUrl = parse_url($nextUrl);
-                                            $nextUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}:3000{$parsedUrl['path']}";
-
-                                            if (isset($parsedUrl['query'])) {
-                                                $nextUrl .= "?{$parsedUrl['query']}";
-                                            }
-                                        }
-                                    @endphp
-                                    <a href="{{ $nextUrl }}" class="btn btn-primary">Next</a>
-                                @endif
-                            </div>
-
+                             @component('components.pagination', ['paginator' => $users]) @endcomponent
 
                     <h3 style="margin-top: 40px">5 User ID terakhir yang dibuat</h3>        
                     <div class="mb-3 col-md-6" style="margin-top: 10px">
