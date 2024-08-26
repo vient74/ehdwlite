@@ -79,12 +79,10 @@
                         </table>
 
           
- 
+                         @component('components.pagination', ['paginator' => $desas])
+                         @endcomponent
 
-                        {{ $desas->links() }}
-
-                
-
+                    
                         
 
                     </div>    

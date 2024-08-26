@@ -72,7 +72,9 @@
                             </tbody>
                         </table>
 
-                        {{ $kecamatans->links() }}
+                 
+                        {!! $kecamatans->withPath(url()->current().':3000')->links() !!}
+
 
                     </div>    
 

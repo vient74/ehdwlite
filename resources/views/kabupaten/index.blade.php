@@ -63,7 +63,8 @@
                             </tbody>
                         </table>
 
-                        {{ $kabupatens->links() }}
+                      
+                            {!! $kabupatens->withPath(url()->current().':3000')->links() !!}
 
                     </div>    
 

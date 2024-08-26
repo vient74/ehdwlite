@@ -71,8 +71,9 @@
                             @endforelse
                             </tbody>
                         </table>
+ 
+                    {!! $provincies->withPath(url()->current().':3000')->links() !!}
 
-                    {{ $provincies->links() }}
 
                     </div>    
 
