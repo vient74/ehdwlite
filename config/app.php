@@ -127,7 +127,7 @@ return [
         'web' => [
             // Other web middleware
           //  \App\Http\Middleware\RoleCheckMiddleware::class,
-            \App\Http\Middleware\ForcePort3000::class,
+           // \App\Http\Middleware\ForcePort3000::class,
         ],
         'api' => [
             // Other API middleware
