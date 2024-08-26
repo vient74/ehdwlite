@@ -71,9 +71,8 @@
                             @endforelse
                             </tbody>
                         </table>
-
-                 
-                        {!! $kecamatans->withPath(url()->current().':3000')->links() !!}
+ 
+                        {!! $kecamatans->withPath(url()->current())->links() !!}
 
 
                     </div>    

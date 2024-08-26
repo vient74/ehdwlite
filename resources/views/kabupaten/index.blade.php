@@ -64,7 +64,7 @@
                         </table>
 
                       
-                            {!! $kabupatens->withPath(url()->current().':3000')->links() !!}
+                            {!! $kabupatens->withPath(url()->current())->links() !!}
 
                     </div>    
 
