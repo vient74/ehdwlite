@@ -89,15 +89,8 @@
                             </tbody>
                         </table>
 
-                        <div class="pagination">
-                            @if($kpms->previousPageUrl())
-                                <a href="{{ $kpms->previousPageUrl() }}" class="btn btn-primary">Previous</a>
-                            @endif
-
-                            @if($kpms->nextPageUrl())
-                                <a href="{{ $kpms->nextPageUrl() }}" class="btn btn-primary">Next</a>
-                            @endif
-                        </div>
+                        @component('components.pagination', ['paginator' => $kpms]) @endcomponent
+ 
 
                     <h3 style="margin-top: 40px">5 KPM ID terakhir yang dibuat</h3>        
                     <div class="mb-3 col-md-6" style="margin-top: 10px">

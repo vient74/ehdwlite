@@ -87,7 +87,7 @@
                                 </tbody>
                             </table>
 
-                             @component('components.pagination', ['paginator' => $users]) @endcomponent
+                            @component('components.pagination', ['paginator' => $users]) @endcomponent
 
                     <h3 style="margin-top: 40px">5 User ID terakhir yang dibuat</h3>        
                     <div class="mb-3 col-md-6" style="margin-top: 10px">
