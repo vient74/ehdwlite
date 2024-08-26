@@ -18,16 +18,26 @@ class KpmController extends Controller
         $max_data = 10;
         $query = request('query');
         if (request('query')) {
-            $kpms = Kpm::select('master.master_kpm.id','nik','master.master_kpm.name','username','email','nomor_telpon','desa_id', 
+
+           $usersQuery = Kpm::select('master.master_kpm.id','nik','master.master_kpm.name','username','email','nomor_telpon','desa_id', 
                                 'master.master_desa.name as desa' ,'status','master_kpm.updated_at')
-                    ->join('master.master_desa','master.master_desa.id','=','master.master_kpm.desa_id')
-                    ->where("master.master_kpm.name", 'like', '' . $query . '%')
-                    ->orWhere('master.master_kpm.username', '', '' . $query . '%')
-                    ->orWhere('master.master_kpm.email', '=', '' . $query . '')
-                    ->orWhere('master.master_kpm.username', 'like', '%' . $query . '%')     
-                    ->orWhere('master.master_desa.id', '=', '' . $query . '')                     
-                    ->cursorPaginate($max_data)
-                    ->withQueryString();
+                    ->join('master.master_desa','master.master_desa.id','=','master.master_kpm.desa_id');
+
+                    if (Auth::user()->role->tag == 'admin_prov') {
+                        $usersQuery->where('master.master_user.provinsi_id', '=', Auth::user()->provinsi_id);
+                    } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                        $usersQuery->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
+                    }
+
+                    $kpms = $usersQuery->where("master.master_kpm.name", 'like', '' . $query . '%')
+                                        ->orWhere('master.master_kpm.username', '', '' . $query . '%')
+                                        ->orWhere('master.master_kpm.email', '=', '' . $query . '')
+                                        ->orWhere('master.master_kpm.username', 'like', '' . $query . '%')     
+                                        ->orWhere('master.master_desa.id', '=', '' . $query . '')                     
+                                        ->cursorPaginate($max_data)
+                                        ->withQueryString();
+
+
                     
         } else {
             $kpms = Kpm::indexKpm($max_data);

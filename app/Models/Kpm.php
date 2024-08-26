@@ -70,6 +70,8 @@ class Kpm extends Model
 
                 if (Auth::user()->role->tag == 'admin_prov') {
                     $sql->where(DB::raw('substring(master.master_kpm.desa_id, 1, 2)'), '=', Auth::user()->provinsi_id);
+                } elseif (Auth::user()->role->tag == 'admin_kabkota') {
+                    $sql->where(DB::raw('substring(master.master_kpm.desa_id, 1, 4)'), '=', Auth::user()->kabkot_id);
                 }
 
         $data = $sql->orderBy('master.master_kpm.id', 'ASC')
