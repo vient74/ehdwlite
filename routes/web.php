@@ -19,31 +19,36 @@ use App\Http\Controllers\PmRemajaPutriController;
 use App\Http\Controllers\ProvinsiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\ForcePort3000;
 
- 
-Route::get('/', [LoginController::class, 'login'])->name('login');
-Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
-Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
-Route::get('chart', [HighchartController::class, 'index'])->name('home')->middleware('auth');
-Route::post('logout', [LoginController::class, 'actionlogout'])->name('logout');
+Route::middleware([ForcePort3000::class])->group(function () {
+    Route::get('/', [LoginController::class, 'login'])->name('login');
+    Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
-Route::get('/desa/metakk', [DesaController::class, 'metakk'])->name('desa.metakk')->middleware('auth');
-Route::get('/desa/showkk/{id}', [DesaController::class, 'showkk'])->name('desa.showkk')->middleware('auth');
-Route::get('/desa/showsasaran/{id}', [DesaController::class, 'showsasaran'])->name('desa.showsasaran')->middleware('auth');
-Route::get('/desa/listdesa/{id}', [DesaController::class, 'listdesa'])->name('desa.listdesa')->middleware('auth');
+    Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+    Route::get('chart', [HighchartController::class, 'index'])->name('home')->middleware('auth');
+    Route::post('logout', [LoginController::class, 'actionlogout'])->name('logout');
 
-// layanan
-Route::get('/layanan_anak', [LayananAnakController::class, 'index'])->name('layanananak.index')->middleware('auth');
-Route::get('/layanan_anak/show_layanan/{id}', [LayananAnakController::class, 'showLayananIndividu'])->name('layanan_anak.show_layanan')->middleware('auth');
-Route::get('/layanan_remaja_putri/show_layanan/{id}', [LayananRemajaPutriController::class, 'showLayananIndividu'])->name('layanan_remaja_putri.show_layanan')->middleware('auth');
-Route::get('/layanan_catin/show_layanan/{id}', [LayananCatinController::class, 'showLayananIndividu'])->name('layanan_catin.show_layanan')->middleware('auth');
+    Route::get('/desa/metakk', [DesaController::class, 'metakk'])->name('desa.metakk')->middleware('auth');
+    Route::get('/desa/showkk/{id}', [DesaController::class, 'showkk'])->name('desa.showkk')->middleware('auth');
+    Route::get('/desa/showsasaran/{id}', [DesaController::class, 'showsasaran'])->name('desa.showsasaran')->middleware('auth');
+    Route::get('/desa/listdesa/{id}', [DesaController::class, 'listdesa'])->name('desa.listdesa')->middleware('auth');
+    Route::post('/desa/rekap_data_desa', [DesaController::class, 'rekapDataDesa'])->name('desa.rekap_data_desa')->middleware('auth');
 
-// penerim manfaat
-Route::get('/pmanak', [PmAnakController::class, 'index'])->name('pmanak.index')->middleware('auth');
-Route::get('/pmremaja_putri', [PmRemajaPutriController::class, 'index'])->name('pmremaja_putri.index')->middleware('auth');
-Route::get('/pmcatin', [PmCatinController::class, 'index'])->name('pmcatin.index')->middleware('auth');
-Route::get('/pmibu_hamil', [PmIbuHamilNifasController::class, 'index'])->name('pmibu_hamil.index')->middleware('auth');
+    // layanan
+    Route::get('/layanan_anak', [LayananAnakController::class, 'index'])->name('layanananak.index')->middleware('auth');
+    Route::get('/layanan_anak/show_layanan/{id}', [LayananAnakController::class, 'showLayananIndividu'])->name('layanan_anak.show_layanan')->middleware('auth');
+    Route::get('/layanan_remaja_putri/show_layanan/{id}', [LayananRemajaPutriController::class, 'showLayananIndividu'])->name('layanan_remaja_putri.show_layanan')->middleware('auth');
+    Route::get('/layanan_catin/show_layanan/{id}', [LayananCatinController::class, 'showLayananIndividu'])->name('layanan_catin.show_layanan')->middleware('auth');
+
+    // penerim manfaat
+    Route::get('/pmanak', [PmAnakController::class, 'index'])->name('pmanak.index')->middleware('auth');
+    Route::get('/pmremaja_putri', [PmRemajaPutriController::class, 'index'])->name('pmremaja_putri.index')->middleware('auth');
+    Route::get('/pmcatin', [PmCatinController::class, 'index'])->name('pmcatin.index')->middleware('auth');
+    Route::get('/pmibu_hamil', [PmIbuHamilNifasController::class, 'index'])->name('pmibu_hamil.index')->middleware('auth');
+});
+
 
 
 Route::middleware(['auth', 'role:acf6f46d-1c53-4e4a-8e35-92fa21e20fc8,3ac13019-aa8b-4c41-9c8e-c0c90cb6bbc0,fa3f2ff4-46d1-4fe9-a7bb-f28fe6cd8b69'])->group(function () {

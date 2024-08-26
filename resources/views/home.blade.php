@@ -55,6 +55,7 @@
                                     <li><a href="{{ url('/user') }}">Daftar User ID Pengguna </a></li>
                                     <li><a href="{{ url('/kpm') }}">Daftar User ID KPM </a></li>
                                     <li><a href="{{ url('/desa') }}">Master Desa</a></li>
+                                    <li><a href="{{ url('/desa/rekap_data_desa') }}">Informasi Desa</a></li>
                                 </ul>    
                             </div>   
                         @elseif (Auth::user()->role->tag == 'sadmin')
@@ -63,6 +64,7 @@
                         <ul>
                             <li><a href="{{ url('/masterkk') }}">Informasi Kepala Keluarga </a></li>
                             <li><a href="{{ url('/mastersasaran') }}">Informasi Sasaran </a></li>
+                            <li><a href="{{ url('/desa/rekap_data_desa') }}">Informasi Desa</a></li>
                             <li><a href="{{ url('/chart') }}">Dashboard </a></li>
                              
                         </ul>    

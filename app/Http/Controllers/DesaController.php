@@ -8,6 +8,7 @@ use App\Models\Kecamatan;
 use App\Models\MasterKk;
 use App\Models\MasterSasaran;
 use App\Models\Provinsi;
+use App\Models\ScoreDesa2023;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -294,6 +295,23 @@ class DesaController extends Controller
                 ->cursorPaginate($max_data);
 
         return view('desa.listdesa', compact('desas'));                  
+    }
+
+    public function rekapDataDesa()
+    {
+        // if(Auth::user()->role->tag == 'admin_desa') {
+        //    $id = Auth::user()->user->desa_id;
+        // } else {
+        //    $id = request('desa_id');
+        // }
+
+        $id = '1403022013';
+
+        $desa  = Desa::where('id', $id)->first();
+        $score = ScoreDesa2023::where('meta_kode_desa', $id)->first();
+
+        return view('desa.rekap_data_desa', compact('desa','score'));    
+
     }
 
 }
