@@ -78,13 +78,12 @@
                             </tbody>
                         </table>
 
-                {{-- Debugging --}}
+          
  
 
                         {{ $desas->links() }}
 
-                        {{-- Debugging --}}
- 
+                
 
                         
 
