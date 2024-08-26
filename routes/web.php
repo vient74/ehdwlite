@@ -27,7 +27,7 @@ use App\Http\Middleware\ForcePort3000;
     Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
     Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
-    Route::get('chart', [HighchartController::class, 'index'])->name('home')->middleware('auth');
+    Route::get('chart', [HighchartController::class, 'index'])->name('chart')->middleware('auth');
     Route::post('logout', [LoginController::class, 'actionlogout'])->name('logout');
 
     Route::get('/desa/metakk', [DesaController::class, 'metakk'])->name('desa.metakk')->middleware('auth');
