@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ForcePort3000;
 
 
-Route::middleware([ForcePort3000::class])->group(function () {
+// Route::middleware([ForcePort3000::class])->group(function () {
     Route::get('/', [LoginController::class, 'login'])->name('login');
     Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
@@ -47,7 +47,7 @@ Route::middleware([ForcePort3000::class])->group(function () {
     Route::get('/pmremaja_putri', [PmRemajaPutriController::class, 'index'])->name('pmremaja_putri.index')->middleware('auth');
     Route::get('/pmcatin', [PmCatinController::class, 'index'])->name('pmcatin.index')->middleware('auth');
     Route::get('/pmibu_hamil', [PmIbuHamilNifasController::class, 'index'])->name('pmibu_hamil.index')->middleware('auth');
-});
+//});
 
 
 
