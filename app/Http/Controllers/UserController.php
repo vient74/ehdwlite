@@ -31,6 +31,7 @@ class UserController extends Controller
             }
             $users = $usersQuery->where(DB::raw('UPPER(name)'), 'like', '%' . strtoupper($query) . '%')
                                 ->orWhere('username', 'like', '%' . $query . '%')
+                                ->orWhere('desa_id', '=', '' . $query . '%')
                                 ->orderBy('id', 'ASC')
                                 ->cursorPaginate($max_data);
         } else {

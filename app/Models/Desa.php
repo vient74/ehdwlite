@@ -77,7 +77,7 @@ class Desa extends Model
                 $query->where(DB::raw("left(master.master_desa.id, 4)"), '=', Auth::user()->kabkot_id);
             }
 
-            $desas = $query->orderBy('master_desa.id', 'ASC')->cursorPaginate($max_data);
+            $desas = $query->orderBy('master.master_desa.id', 'ASC')->cursorPaginate($max_data);
 
         return $desas;             
 
@@ -110,7 +110,7 @@ class Desa extends Model
                 }
 
                 $sql->where("subquery.name", 'like', '%' . $query . '%')
-                    ->orWhere('long_name', 'like', '%' . $query . '%')
+                    ->orWhere('subquery.long_name', 'like', '%' . $query . '%')
                     ->orWhere('subquery.id', $query);
 
                 $desas = $sql->orderBy('subquery.id', 'ASC')
