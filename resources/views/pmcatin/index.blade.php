@@ -41,6 +41,7 @@
                                     <th scope="col">Umur</th>
                                     <th scope="col" class="text-end">Terjadwal</th>
                                     <th scope="col" class="text-end">Realisasi</th>
+                                    <th scope="col" class="text-end">%</th>
                                     <th scope="col">Nama KPM</th>
                                     <th scope="col">Desa</th>
                                     <th scope="col"></th>
@@ -64,9 +65,9 @@
                                     <td>
                                         <b>{{ strtoupper($data->nama) }}</b><br>
 
-                                        <a href="{{ route('layanan_catin.show_layanan', $data->nik) }}">
-                                            <span class="badge bg-primary">Lihat Layanan Diterima</span>
-                                        </a>
+                                    <a href="{{ route('layanan_catin.show_layanan', $data->nik) }}">
+                                        <span class="badge bg-primary">Lihat Layanan Diterima</span>
+                                    </a>
                                     </td>
                                     <td>
                                         @if ($data->status_keluarga == true)
@@ -77,24 +78,35 @@
                                             Tidak Diketahui
                                         @endif
                                     </td>
-                               
                                     <td class="text-center"> {{ \Carbon\Carbon::parse($data->tgl_lahir)->format('d-m-Y') }}</td>
                                     <td class="text-end"> {{ $data->umur }}</td>
                                     <td class="text-end"><h5><span class="badge bg-danger">{{ $data->task_ava }}</span></h5></td>
                                     <td class="text-end"><h5><span class="badge bg-secondary">{{ $data->task_val }}</span></h5></td>
+                                    <td class="text-end">
+                                        @php
+                                        $persen = 0;
+                                        if ($data->task_ava >= 1 && $data->task_val >= 1)
+                                            $persen = round(($data->task_val/$data->task_ava) * 100);
+
+                                        if ($persen == 0)
+                                            $persen=0;
+                                        else
+                                            $persen=$persen;
+                                        @endphp
+
+                                        {{ $persen }}
+                                    </td>
                                     <td>{{ strtoupper($data->nama_kpm) }}</td>
                                     <td>{{ $data->desa }} </td>
                                     <td>
                                         <small>Kalkulasi Terakhir<br>
                                              {{ \Carbon\Carbon::parse($data->last_calculate)->format('d-m-Y') }}
                                         </small><br>
-
                                         <small>Pembaharuan Terakhir<br>
                                         {{ \Carbon\Carbon::parse($data->updated_at)->format('d-m-Y H:i:s') }}
                                         </small>
                                     </td>
                                 </tr>
-
                             @empty
                                 <tr>
                                     <td class="text-center text-muted" colspan="5">Data Sasaran tidak tersedia</td>

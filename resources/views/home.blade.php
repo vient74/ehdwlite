@@ -64,7 +64,7 @@
                         <ul>
                             <li><a href="{{ url('/masterkk') }}">Informasi Kepala Keluarga </a></li>
                             <li><a href="{{ url('/mastersasaran') }}">Informasi Sasaran </a></li>
-                            <li><a href="{{ url('/desa/rekap_data_desa') }}">Informasi Desa</a></li>
+                            <li><a href="{{ url('/desa/rekap_data_desa_form') }}">Informasi Desa</a></li>
                             <li><a href="{{ url('/chart') }}">Dashboard </a></li>
                              
                         </ul>    

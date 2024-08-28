@@ -93,9 +93,7 @@ class Desa extends Model
                            master.master_desa.updated_at,
                            COUNT(DISTINCT master.master_kpm.id)     AS jumlah_kpm,
                            COUNT(DISTINCT master.master_user.id)    AS jumlah_user
-                           
                       FROM master.master_desa
-             
                  LEFT JOIN master.master_user ON master.master_user.desa_id = master.master_desa.id
                  LEFT JOIN master.master_kpm  ON master.master_kpm.desa_id  = master.master_desa.id
                   GROUP BY master.master_desa.id, master.master_desa.name, master.master_desa.long_name

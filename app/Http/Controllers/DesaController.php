@@ -9,6 +9,7 @@ use App\Models\MasterKk;
 use App\Models\MasterSasaran;
 use App\Models\Provinsi;
 use App\Models\ScoreDesa2023;
+use App\Models\ScoreDesa2024;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -22,7 +23,7 @@ class DesaController extends Controller
      */
     public function index()
     {
-        $max_data = 8;
+        $max_data = 20;
         $query = strtoupper(request('query'));
         if (request('query')) {
             $desas = Desa::indexDesaSearch($query, $max_data);
@@ -297,20 +298,63 @@ class DesaController extends Controller
         return view('desa.listdesa', compact('desas'));                  
     }
 
-    public function rekapDataDesa()
+    // public function rekapDataDesa()
+    // {
+    //     // Validasi request yang masuk
+    //     $validatedData = request()->validate([
+    //         'desa_id' => 'required',
+    //         'tahun'   => 'required',
+    //         'tw'      => 'required',
+    //     ]);
+
+    //     // Jika validasi lolos, gunakan data yang telah divalidasi
+    //     $id    = $validatedData['desa_id'];
+    //     $tahun = $validatedData['tahun'];
+    //     $tw    = $validatedData['tw'];
+    
+    //     $desa  = Desa::where('id', $id)->first();
+    //     $score = ScoreDesa2023::where('meta_kode_desa', $id)
+    //             ->where('meta_tahun', $tahun)
+    //             ->where('meta_tw', $tw)
+    //             ->first();
+
+    //     return view('desa.rekap_data_desa', compact('desa','score'));
+    // }
+
+    public function rekapDataDesaForm()
     {
-        // if(Auth::user()->role->tag == 'admin_desa') {
-        //    $id = Auth::user()->user->desa_id;
-        // } else {
-        //    $id = request('desa_id');
-        // }
 
-        $id = '1403022013';
-
+        $id    = request('desa_id');
+        $tahun = request('tahun');
+        $tw    = request('tw');
+       
         $desa  = Desa::where('id', $id)->first();
-        $score = ScoreDesa2023::where('meta_kode_desa', $id)->first();
+  
+        return view('desa.rekap_data_desa_form', compact('desa'));    
 
-        return view('desa.rekap_data_desa', compact('desa','score'));    
+    }
+
+    public function rekapDataDesa(Request $request)
+    {
+        $id    = $request->desa_id;
+        $tahun = $request->tahun;
+        $tw    = $request->tw;
+       
+        $desa  = Desa::where('id', $id)->first();
+        if ($tahun == '2023') {
+            $score = ScoreDesa2023::where('meta_kode_desa', $id)
+                    ->where('meta_tahun', $tahun)
+                    ->where('meta_tw', $tw)
+                    ->first();
+        } elseif ($tahun == '2024') {
+            $score = ScoreDesa2024::where('meta_kode_desa', $id)
+                    ->where('meta_tahun', $tahun)
+                    ->where('meta_tw', $tw)
+                    ->first();
+        }            
+
+
+        return view('desa.rekap_data_desa', compact('desa', 'score'));    
 
     }
 

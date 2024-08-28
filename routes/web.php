@@ -34,6 +34,8 @@ use App\Http\Middleware\ForcePort3000;
     Route::get('/desa/showkk/{id}', [DesaController::class, 'showkk'])->name('desa.showkk')->middleware('auth');
     Route::get('/desa/showsasaran/{id}', [DesaController::class, 'showsasaran'])->name('desa.showsasaran')->middleware('auth');
     Route::get('/desa/listdesa/{id}', [DesaController::class, 'listdesa'])->name('desa.listdesa')->middleware('auth');
+    
+    Route::get('/desa/rekap_data_desa_form', [DesaController::class, 'rekapDataDesaForm'])->name('desa.rekap_data_desa_form')->middleware('auth');
     Route::post('/desa/rekap_data_desa', [DesaController::class, 'rekapDataDesa'])->name('desa.rekap_data_desa')->middleware('auth');
 
     // layanan
