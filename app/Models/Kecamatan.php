@@ -97,7 +97,8 @@ class Kecamatan extends Model
                         ->orWhere('master_kecamatan.id', '=', '' . $query .'')
                         ->groupBy('master.master_kecamatan.id', 'master.master_kecamatan.name')
                         ->orderBy('master.master_kecamatan.id', 'ASC')
-                        ->paginate($max_data);
+                        ->paginate($max_data)
+                        ->withQueryString();
 
                 return $data;
     }
@@ -119,7 +120,8 @@ class Kecamatan extends Model
                 ->orwhere('master_kecamatan.id', '=', '' . $query .'')
                 ->groupBy('master.master_kecamatan.id', 'master.master_kecamatan.name')
                 ->orderBy('master.master_kecamatan.id', 'ASC')
-                ->paginate($max_data);
+                ->paginate($max_data)
+                ->withQueryString();
     }
 
 }

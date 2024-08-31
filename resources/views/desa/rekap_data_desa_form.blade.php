@@ -46,6 +46,13 @@
                                 <option value="2024">2024</option>
                             </select>
 
+                            <label for="validasi">Pilih Kategori</label>
+                            <select name="validasi" id="validasi" class="form-control w-25">
+                                <option value=""></option>
+                                <option value="1">Belum Tervalidasi</option>
+                                <option value="2">Tervalidasi</option>
+                            </select>
+
                             <label for="desa_id">Pilih Triwulan</label>
                             <select name="tw" id="tw" class="form-control w-25">
                                 <option value=""></option>

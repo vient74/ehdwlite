@@ -74,7 +74,7 @@ class PmRemajaPutri extends Model
     }     
 
 
-    protected function showPmRemajaPutriSearch($max_data, $query)
+    protected function showPmRemajaPutriSearch($query, $max_data)
     {
         $remajas = DB::table('layanan.pm_remaja_putri')
 

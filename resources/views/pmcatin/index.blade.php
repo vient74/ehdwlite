@@ -109,24 +109,14 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="text-center text-muted" colspan="5">Data Sasaran tidak tersedia</td>
+                                    <td class="text-center text-muted" colspan="11">Data Sasaran tidak tersedia</td>
                                 </tr>
                             @endforelse
 
                             </tbody>
                         </table>
 
-                    
-                         <div class="pagination">
-                                @if($catins->previousPageUrl())
-                                    <a href="{{ $catins->previousPageUrl() }}" class="btn btn-primary">Previous</a>
-                                @endif
-
-                                @if($catins->nextPageUrl())
-                                    <a href="{{ $catins->nextPageUrl() }}" class="btn btn-primary">Next</a>
-                                @endif
-                            </div>
-                            <br> 
+                        {!! $catins->withPath(url()->current())->links() !!}
 
                         <a href="{{ route('pmcatin.index') }}" class="btn btn-md btn-warning">back</a>
 

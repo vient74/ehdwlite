@@ -10,16 +10,17 @@ class PmCatinController extends Controller
 {
     public function index()
     {
-        $max_data = 8;
-        $query = strtoupper(request('query'));
+        $max_data = 10;
+        $query = request('query');
+
         if (request('query')) {
-            $catins = PmCatin::showPmCatinSearch($query, $max_data);
+            $catins = PmCatin::showPmCatinIndexSearch($query, $max_data);
         } else {
             $catins = PmCatin::showPmCatinIndex($max_data);
         }    
 
-        $jumlahPm = DB::table('layanan.layanan_catin')->count();
-
+        //$jumlahPm = DB::table('layanan.layanan_catin')->count();
+        $jumlahPm = 1000;
         return view('pmcatin.index', compact('catins','jumlahPm'));
     }
 }

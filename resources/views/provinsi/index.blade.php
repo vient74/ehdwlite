@@ -72,7 +72,7 @@
                             </tbody>
                         </table>
  
-                    {!! $provincies->withPath(url()->current().':3000')->links() !!}
+                    {!! $provincies->withPath(url()->current())->links() !!}
 
 
                     </div>    

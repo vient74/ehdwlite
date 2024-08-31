@@ -82,7 +82,8 @@ class Kabupaten extends Model
                              ->orWhere('master_kab_kota.id', '=', '' . $query .'') 
                              ->groupBy('master.master_kab_kota.id', 'master.master_kab_kota.name')
                              ->orderBy('master.master_kab_kota.id', 'ASC')
-                             ->paginate($max_data);
+                             ->paginate($max_data)
+                             ->withQueryString();
 
         return $data;             
     }

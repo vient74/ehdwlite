@@ -10,6 +10,8 @@ use App\Models\MasterSasaran;
 use App\Models\Provinsi;
 use App\Models\ScoreDesa2023;
 use App\Models\ScoreDesa2024;
+use App\Models\ScoreDesaValidate2023;
+use App\Models\ScoreDesaValidate2024;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -336,26 +338,38 @@ class DesaController extends Controller
 
     public function rekapDataDesa(Request $request)
     {
-        $id    = $request->desa_id;
-        $tahun = $request->tahun;
-        $tw    = $request->tw;
+        $id         = $request->desa_id;
+        $tahun      = $request->tahun;
+        $tw         = $request->tw;
+        $kategori   = $request->kategori;
        
         $desa  = Desa::where('id', $id)->first();
         if ($tahun == '2023') {
-            $score = ScoreDesa2023::where('meta_kode_desa', $id)
-                    ->where('meta_tahun', $tahun)
-                    ->where('meta_tw', $tw)
-                    ->first();
+            if ($kategori == 1) { // belum validasi
+                $score = ScoreDesa2023::where('meta_kode_desa', $id)
+                        ->where('meta_tahun', $tahun)
+                        ->where('meta_tw', $tw)
+                        ->first();
+            } else {
+                $score = ScoreDesaValidate2023::where('meta_kode_desa', $id)
+                        ->where('meta_tahun', $tahun)
+                        ->where('meta_tw', $tw)
+                        ->first();
+            }    
         } elseif ($tahun == '2024') {
-            $score = ScoreDesa2024::where('meta_kode_desa', $id)
-                    ->where('meta_tahun', $tahun)
-                    ->where('meta_tw', $tw)
-                    ->first();
+            if ($kategori == 1) { // belum validasi
+                $score = ScoreDesa2024::where('meta_kode_desa', $id)
+                        ->where('meta_tahun', $tahun)
+                        ->where('meta_tw', $tw)
+                        ->first();
+            } else {
+                $score = ScoreDesaValidate2024::where('meta_kode_desa', $id)
+                        ->where('meta_tahun', $tahun)
+                        ->where('meta_tw', $tw)
+                        ->first();
+            }            
         }            
-
-
         return view('desa.rekap_data_desa', compact('desa', 'score'));    
-
     }
 
 }

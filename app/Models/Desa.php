@@ -112,7 +112,9 @@ class Desa extends Model
                     ->orWhere('subquery.id', $query);
 
                 $desas = $sql->orderBy('subquery.id', 'ASC')
-                             ->cursorPaginate($max_data);
+                             ->cursorPaginate($max_data)
+                             ->withQueryString();
+
         return $desas;
     }
 

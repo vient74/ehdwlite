@@ -76,8 +76,6 @@ class Provinsi extends Model
 
     protected function indexProvinsiSearch($max_data, $query)
     {
-        $query = strtoupper($query);
-        
         $sql = Provinsi::select(
                'master.master_provinsi.id',
                'master.master_provinsi.kode_bps',

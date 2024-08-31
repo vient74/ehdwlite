@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Desa;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,6 +20,57 @@ class UserController extends Controller
      */
     public function index()
     {
+
+         
+    //    $data = DB::table('master.master_desa')
+    //             ->where(DB::raw('SUBSTRING(master.master_desa.id, 1, 2)'), '=', '92')
+    //             ->where(DB::raw('SUBSTRING(master.master_desa.id, 1, 4)'), '=', '9204')
+    //             ->get();
+
+    //      //dd($request->input('role_id'));
+    //     foreach ($data as $dd) {
+
+    //         $provinsi_id  = substr($dd->id, 0, 2);
+    //         $kabkot_id    = substr($dd->id, 0, 4);
+    //         $kecamatan_id = substr($dd->id, 0, 6);
+
+    //         // echo $provinsi_id .'- '. $kabkot_id . '-' . $kecamatan_id . '-' . $dd->id;
+    //         //  echo '<br>';
+
+    //         $string = $dd->name;
+            
+    //         // Menghilangkan spasi
+    //         $hasil = str_replace(' ', '', $string);
+
+    //         // Mengubah menjadi huruf kecil
+    //         $namauser = strtolower($hasil);
+
+    //         $cek =  DB::table('master.master_user')
+    //                 ->where('username', 'admin'.$namauser)
+    //                 ->orWhere('email', 'admin'.$namauser.date('i').'@gmail.com')
+    //                 ->first();
+
+    //         if (empty($cek)) {
+    //             DB::table('master.master_user')->insert([
+    //                 'role_id' => '129b44eb-d7ab-4023-9f21-3858cc733b28',
+    //                 'provinsi_id' => $provinsi_id,
+    //                 'kabkot_id'   => $kabkot_id,
+    //                 'kecamatan_id' => $kecamatan_id,
+    //                 'desa_id' => $dd->id,
+    //                 'status' => 1,
+    //                 'name' => $dd->name,
+    //                 'username' => 'admin'.$namauser,
+    //                 'email' => 'admin'.$namauser.date('i').'@gmail.com',
+    //                 'password' => Hash::make('12345678'),  
+    //                 'created_at' => now(),
+    //                 'updated_at' => now()
+    //             ]);
+    //         }
+
+    //     }
+    //     echo "DONE";
+
+
         $max_data = 10;
         $query = request('query');
 
@@ -35,7 +87,9 @@ class UserController extends Controller
                                 ->orWhere('kecamatan_id', '=', $query)
                                 ->orWhere('desa_id', '=', $query)
                                 ->orderBy('id', 'ASC')
-                                ->cursorPaginate($max_data);
+                                ->cursorPaginate($max_data)
+                                ->withQueryString();
+
         } else {
             $usersQuery = User::select('*');
             if (Auth::user()->role->tag == 'admin_prov') {
@@ -43,7 +97,9 @@ class UserController extends Controller
             } elseif (Auth::user()->role->tag == 'admin_kabkota') {
                 $usersQuery->where('master.master_user.kabkot_id', '=', Auth::user()->kabkot_id);
             }
-            $users = $usersQuery->orderBy('id', 'ASC')->cursorPaginate($max_data);
+            $users = $usersQuery->orderBy('id', 'ASC')
+                     ->cursorPaginate($max_data)
+                     ->withQueryString();
         }
 
         $usersQueryJml = User::select('*');
@@ -289,5 +345,9 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->with('message', 'Password updated successfully!');
     }
+
+
+    
+
 
 }
