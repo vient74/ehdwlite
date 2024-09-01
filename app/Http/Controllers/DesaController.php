@@ -341,7 +341,9 @@ class DesaController extends Controller
         $id         = $request->desa_id;
         $tahun      = $request->tahun;
         $tw         = $request->tw;
-        $kategori   = $request->kategori;
+        $kategori   = $request->validasi;
+
+        // dd($request->all());
        
         $desa  = Desa::where('id', $id)->first();
         if ($tahun == '2023') {
@@ -350,6 +352,8 @@ class DesaController extends Controller
                         ->where('meta_tahun', $tahun)
                         ->where('meta_tw', $tw)
                         ->first();
+
+               // dd($score);        
             } else {
                 $score = ScoreDesaValidate2023::where('meta_kode_desa', $id)
                         ->where('meta_tahun', $tahun)

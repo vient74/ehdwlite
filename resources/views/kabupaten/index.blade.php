@@ -39,6 +39,10 @@
                                     <th scope="col">ID</th>
                                     <th scope="col">Kode BPS</th>
                                     <th scope="col">Kabupaten</th>
+                                    <th scope="col"></th>
+                                    <th scope="col" class="text-end">Jumlah Kecamatan</th>
+                                    <th scope="col" class="text-end">Jumlah User Admin Desa(eHDW)</th>
+                                    <th scope="col" class="text-end">Jumlah User KPM</th>
                                     <th scope="col" class="text-center">Updated</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
@@ -49,6 +53,10 @@
                                     <td>{{ $data->id }}</td>
                                     <td>{{ $data->kode_bps }}</td>
                                     <td>{{ $data->name }}</td>
+                                    <td class="text-center"><a href="{{ route('kecamatan.listkecamatan', $data->id) }}">Lihat Kecamatan</a></td>
+                                    <td class="text-end">{{ $data->jumlah_kecamatan }}</td>
+                                    <td class="text-end">{{ $data->jumlah_user }}</td>
+                                    <td class="text-end">{{ $data->jumlah_kpm }}</td>
                                     <td class="text-center">{{ $data->updated_at ? $data->updated_at->format('d-m-Y') : 'N/A' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('kabupaten.edit', $data->id) }}" class="btn btn-sm btn-warning">EDIT</a>

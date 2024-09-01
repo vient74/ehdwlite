@@ -138,4 +138,36 @@ class KabupatenController extends Controller
             }
         }
     }    
+
+
+    public function listKabupaten($id)
+    {
+        $max_data = 10;
+
+        $kabs = DB::table('master.master_kab_kota')
+                ->leftJoin('master.master_desa', DB::raw('substring(master_desa.id, 1, 4)'), '=', 'master.master_kab_kota.id')
+                ->leftJoin('master.master_meta_sasaran', 'master.master_meta_sasaran.desa_id', '=', 'master.master_desa.id')
+                ->leftJoin('master.master_meta_kk', 'master.master_meta_kk.desa_id', '=', 'master.master_desa.id')
+                ->leftJoin('master.master_user', 'master.master_user.desa_id', '=', 'master.master_desa.id')
+                ->leftJoin('master.master_kpm', 'master.master_kpm.desa_id', '=', 'master.master_desa.id')
+                ->select(
+                    'master.master_kab_kota.id',
+                    'master.master_kab_kota.name',
+                    'master.master_kab_kota.long_name',
+                    'master.master_kab_kota.updated_at',
+
+                        DB::raw('count(distinct master.master_kpm.id) as jumlah_kpm'),
+                        DB::raw('count(distinct master.master_user.id) as jumlah_user'),
+                        DB::raw('count(distinct master.master_meta_kk.kk) as jumlah_kk'),
+                        DB::raw('count(distinct master.master_meta_sasaran.nik) as jumlah_sasaran')
+                )
+                // ->where(DB::raw('LEFT(master_kab_kota.id, 6)'), '=', $id)
+                ->where(DB::raw('substring(master_kab_kota.id, 1, 2)'), '=', $id)
+                ->groupBy('master.master_kab_kota.id', 'master.master_kab_kota.name', 'master.master_kab_kota.long_name')
+                ->orderBy('master.master_kab_kota.id', 'ASC')
+                ->cursorPaginate($max_data);
+
+        return view('kabupaten.listkab', compact('kabs'));                  
+    }
+
 }

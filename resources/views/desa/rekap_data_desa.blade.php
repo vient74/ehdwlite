@@ -46,6 +46,13 @@
                                 <option value="2024">2024</option>
                             </select>
 
+                             <label for="validasi">Pilih Kategori</label>
+                            <select name="validasi" id="validasi" class="form-control w-25">
+                                <option value=""></option>
+                                <option value="1">Belum Tervalidasi</option>
+                                <option value="2">Tervalidasi</option>
+                            </select>
+
                             <label for="desa_id">Pilih Triwulan</label>
                             <select name="tw" id="tw" class="form-control w-25">
                                 <option value=""></option>
@@ -206,46 +213,67 @@
                                             </tr>
                                             <tr>
                                                 <td>Anak mendapatkan Imunisasi Campak</td>
-                                                <td class="text-end">{{ $score->anak_i_campak_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_campak }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_campak_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_campak ?? 0) : 1 }}
+                                                </td>
                                                 <td class="text-end">
                                                     @php
-                                                     $ipersen = round(($score->anak_i_campak/$score->anak_i_campak_ava) * 100);  
+                                                        $anak_i_campak = $score->anak_i_campak ?? 0;
+                                                        $anak_i_campak_ava = $score->anak_i_campak_ava ?? 1;  // Avoid division by zero
+                                                        $ipersen = round(($anak_i_campak / $anak_i_campak_ava) * 100);  
                                                     @endphp
-                                                    {{ $ipersen .'%' }}
+                                                    {{ $ipersen . '%' }}
                                                 </td>
                                             </tr>
+
                                            
                                              <tr>
                                                 <td>Anak Giji Buruk</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td class="text-end">{{ $score->anak_i_gizi_buru }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_gizi_buru ?? 0) : 0 }}
+                                                </td>
                                             </tr>
                                              <tr>
                                                 <td>Anak Giji Kurang</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td class="text-end">{{ $score->anak_i_gizi_kurang }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_gizi_kurang ?? 0) : 0 }}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Anak Stunting</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td class="text-end">{{ $score->anak_i_gizi_stunting }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_gizi_stunting ?? 0) : 0 }}
+                                                </td>
                                             </tr>
                                              <tr>
                                                 <td colspan="4" class="fw-bold fs-6">Layanan PAUD</td>
                                             </tr>
                                             <tr>
                                                 <td>Anak PAUD</td>
-                                                <td class="text-end">{{ $score->anak_i_ikut_paud_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_ikut_paud }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_ikut_paud_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end"> 
+                                                     {{ $score ? ($score->anak_i_ikut_paud ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                        $ppersen = round(($score->anak_i_ikut_paud/$score->anak_i_ikut_paud_ava) * 100);
+                                                        $anak_i_paud = $score->anak_i_ikut_paud ?? 0;
+                                                        $anak_i_paud_ava = $score->anak_i_ikut_paud_ava ?? 1;  // Avoid division by zero
+                                                        $ipaud = round(($anak_i_paud / $anak_i_paud_ava) * 100);  
                                                     @endphp
-                                                    {{ $ppersen .'%'  }}
+                                                    {{ $ipaud . '%' }}
+ 
                                                 </td>
                                             </tr>
 
@@ -255,60 +283,102 @@
 
                                             <tr>
                                                 <td>Imunisasi 1 Terjadwal</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_1_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_1 }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_1_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_1 ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                                     @php
-                                                        $imun1 = round(($score->anak_i_imun_1/$score->anak_i_imun_1_ava) * 100);
-                                                    @endphp    
-                                                    {{ $imun1  .'%' }}
+                                                        $imun1 = $score->anak_i_ikut_paud ?? 0;
+                                                        $imun1_ava = $score->anak_i_ikut_paud_ava ?? 1;  // Avoid division by zero
+                                                        $imun_1 = round(($imun1 / $imun1_ava) * 100);  
+                                                    @endphp
+                                                    {{ $imun_1 . '%' }}
+ 
+            
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td>Imunisasi 2 Terjadwal</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_2_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_2 }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_2_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_2 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                        $imun2 = round(($score->anak_i_imun_2/$score->anak_i_imun_2_ava) * 100);
-                                                    @endphp    
-                                                    {{ $imun2  .'%' }}
+                                                        $imun2     = $score->anak_i_imun_2 ?? 0;
+                                                        $imun2_ava = $score->anak_i_imun_2_ava ?? 1;  // Avoid division by zero
+                                                        $imun_2    = round(($imun2 / $imun2_ava) * 100);  
+                                                    @endphp
+                                                    {{ $imun_2 . '%' }}
+
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Imunisasi 3 Terjadwal</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_3_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_3 }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_3_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_3 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                        $imun3 = round(($score->anak_i_imun_3/$score->anak_i_imun_3_ava) * 100);
-                                                    @endphp    
-                                                    {{ $imun3  .'%' }}
+                                                        $imun3     = $score->anak_i_imun_3 ?? 0;
+                                                        $imun3_ava = $score->anak_i_imun_3_ava ?? 1;  // Avoid division by zero
+                                                        $imun_3    = round(($imun3 / $imun3_ava) * 100);  
+                                                    @endphp
+                                                    {{ $imun_3 . '%' }}
+
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Imunisasi 4 Terjadwal</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_4_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_4 }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_4_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_4 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                        $imun4 = round(($score->anak_i_imun_4/$score->anak_i_imun_4_ava) * 100);
-                                                    @endphp    
-                                                    {{ $imun4  .'%' }}
+                                                        $imun4     = $score->anak_i_imun_4 ?? 0;
+                                                        $imun4_ava = $score->anak_i_imun_4_ava ?? 1;  // Avoid division by zero
+                                                        $imun_4    = round(($imun4 / $imun4_ava) * 100);  
+                                                    @endphp
+                                                    {{ $imun_4 . '%' }}
+ 
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Imunisasi 5 Terjadwal</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_5_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_imun_5 }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_5_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_imun_5 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                        $imun5 = round(($score->anak_i_imun_4/$score->anak_i_imun_5_ava) * 100);
-                                                    @endphp    
-                                                    {{ $imun5 .'%'  }}
+                                                        $imun5     = $score->anak_i_imun_5 ?? 0;
+                                                        $imun5_ava = $score->anak_i_imun_5_ava ?? 1;  // Avoid division by zero
+                                                        $imun_5    = round(($imun5 / $imun5_ava) * 100);  
+                                                    @endphp
+                                                    {{ $imun_5 . '%' }}
+
+                                      
                                                 </td>
                                             </tr>
 
@@ -318,32 +388,43 @@
 
                                             <tr>
                                                 <td>Anak Tambah Gizi</td>
-                                                <td class="text-end">{{ $score->anak_i_tambah_gizi_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_tambah_gizi }}</td>
                                                 <td class="text-end">
-                   
+                                                    {{ $score ? ($score->anak_i_tambah_gizi_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_tambah_gizi ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                    if ($score->anak_i_tambah_gizi_ava != 0) {
-                                                        $gizi = round(($score->anak_i_tambah_gizi/$score->anak_i_tambah_gizi_ava) * 100);
-                                                    } else {
-                                                        $gizi = 0; 
-                                                    }
+                                                        $tambah_gizi     = $score->anak_i_tambah_gizi ?? 0;
+                                                        $tambah_gizi_ava = $score->anak_i_tambah_gizi_ava ?? 1;  // Avoid division by zero
+                                                        $tambah_gizi     = round(($tambah_gizi / $tambah_gizi_ava) * 100);  
                                                     @endphp
-                                                    {{ $gizi . '%' }}
-
-
+                                                    {{ $tambah_gizi . '%' }}
+                   
+              
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Anak Tumbuh Kembang</td>
-                                                <td class="text-end">{{ $score->anak_i_tumbuh_kembang_ava }}</td>
-                                                <td class="text-end">{{ $score->anak_i_tumbuh_kembang }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_tumbuh_kembang_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->anak_i_tumbuh_kembang ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                        $tumbuh_kembang = round(($score->anak_i_tumbuh_kembang/$score->anak_i_tumbuh_kembang_ava) * 100);
-                                                    @endphp    
-                                                    {{ $tumbuh_kembang  .'%' }}
+                                                        $tumbuh_kembang     = $score->anak_i_tumbuh_kembang ?? 0;
+                                                        $tumbuh_kembang_ava = $score->anak_i_tumbuh_kembang_ava ?? 1;  // Avoid division by zero
+                                                        $tumbuh_kembang_1   = round(($tumbuh_kembang / $tumbuh_kembang_ava) * 100);  
+                                                    @endphp
+                                                    {{ $tumbuh_kembang_1 . '%' }}
+
+                                  
                                                 </td>
                                             </tr>
 
@@ -354,7 +435,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->anak_imunisasi_lengkap }}
+                                                    {{ $score ? ($score->anak_imunisasi_lengkap ?? 0) : 0 }}
+                                                 
                                                 </td>
                                             </tr>
 
@@ -363,7 +445,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->anak_indikasi_gizi }}
+                                                    {{ $score ? ($score->anak_indikasi_gizi ?? 0) : 0 }}
+                                              
                                                 </td>
                                             </tr>
 
@@ -372,7 +455,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->anak_indikasi_gizi_dan_mendapatkan_asupan }}
+                                                    {{ $score ? ($score->anak_indikasi_gizi_dan_mendapatkan_asupan ?? 0) : 0 }}
+               
                                                 </td>
                                             </tr>
 
@@ -382,8 +466,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
 
-                                                    {{ number_format(floor($score->anak_score * 100) / 100, 2) }}
-                                                      
+                                                    {{ $score ? number_format(floor($score->anak_score * 100) / 100, 2) : '0.00' }}
+ 
  
                                                 </td>
                                             </tr>
@@ -393,7 +477,9 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->anak_total_pm }}
+        
+                                                    {{ $score ? number_format(floor($score->anak_total_pm * 100) / 100, 2) : '0.00' }}
+ 
                                                 </td>
                                             </tr>
 
@@ -402,7 +488,9 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->anak_val }}
+                
+                                                    {{ $score ? number_format(floor($score->anak_val * 100) / 100, 2) : '0.00' }}
+ 
                                                 </td>
                                             </tr>
 
@@ -415,45 +503,53 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->bumil_ava }}
+                                  
+                                                    {{ $score ? number_format(floor($score->bumil_ava * 100) / 100, 2) : '0.00' }}
+
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Ibu Hamil KB</td>
-                                                <td class="text-end">{{ $score->bumil_i_kb_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_kb }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_kb_ava ?? 0) : 0 }}
+
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_kb ?? 0) : 0 }}
+
+                                                </td>
                                                 <td class="text-end">
                                                 
-
                                                     @php
-                                                    if ($score->catin_i_vaksin_ava != 0) {
-                                                        $bumil_kb  = round(($score->bumil_i_kb/$score->bumil_i_kb_ava) * 100);
-                                                    } else {
-                                                        $bumil_kb = 0; 
-                                                    }
+                                                        $bumil_kb     = $score->bumil_i_kb ?? 0;
+                                                        $bumil_kb_ava = $score->bumil_i_kb_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_kb_1   = round(($bumil_kb / $bumil_kb_ava) * 100);  
                                                     @endphp
+                                                    {{ $bumil_kb_1 . '%' }}
 
-                                                    {{ $bumil_kb  . '%' }}
 
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Ibu Hamil KEK</td>
-                                                <td class="text-end">{{ $score->bumil_i_kek_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_kek }}</td>
                                                 <td class="text-end">
-                  
-                                                    @php
-                                                    if ($score->bumil_i_kek_ava != 0) {
-                                                        $bumil_kek = round(($score->bumil_i_kek/$score->bumil_i_kek_ava) * 100);
-                                                    } else {
-                                                        $bumil_kek = 0; 
-                                                    }
-                                                    @endphp
+                                                    {{ $score ? ($score->bumil_i_kek_ava ?? 0) : 0 }}
 
-                                                    {{ $bumil_kek  . '%' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_kek ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                
+
+                                                    @php
+                                                        $bumil_kek     = $score->bumil_i_kek ?? 0;
+                                                        $bumil_kek_ava = $score->bumil_i_kek_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_kek_1   = round(($bumil_kek / $bumil_kek_ava) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_kek_1 . '%' }}
 
 
 
@@ -462,221 +558,231 @@
 
                                              <tr>
                                                 <td>Periksa Kehamilan 1</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_1_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_1 }}</td>
                                                 <td class="text-end">
-                                               
+                                                    {{ $score ? ($score->bumil_i_periksa_1_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_1 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
                                                     @php
-                                                    if ($score->bumil_i_periksa_1_ava != 0) {
-                                                        $periksa1 = round(($score->bumil_i_periksa_1/$score->bumil_i_periksa_1_ava) * 100);
-                                                    } else {
-                                                        $periksa1 = 0; 
-                                                    }
+                                                        $bumil_periksa     = $score->bumil_i_periksa_1 ?? 0;
+                                                        $bumil_periksa_ava = $score->bumil_i_periksa_1_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_1   = round(($bumil_periksa / $bumil_periksa_ava) * 100);  
                                                     @endphp
-
-                                                    {{ $periksa1 . '%' }}
-
-
+                                                    {{ $bumil_periksa_1 . '%' }}
+                                               
                                                 </td>
                                             </tr> 
 
-                                            <tr>
+
+                                              <tr>
                                                 <td>Periksa Kehamilan 1 2</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_1_2_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_1_2 }}</td>
                                                 <td class="text-end">
-                         
-                                                    @php
-                                                    if ($score->bumil_i_periksa_1_2_ava != 0) {
-                                                        $periksa12 = round(($score->bumil_i_periksa_1_2/$score->bumil_i_periksa_1_2_ava) * 100);
-                                                    } else {
-                                                        $periksa12 = 0; 
-                                                    }
-                                                    @endphp
-
-                                                    {{ $periksa12 . '%' }}
-
-
+                                                    {{ $score ? ($score->bumil_i_periksa_1_2_ava ?? 0) : 0 }}
                                                 </td>
-                                            </tr>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_1_2 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
-                                            <tr>
+                                                    @php
+                                                        $bumil_periksa_1_2     = $score->bumil_i_periksa_1_2 ?? 0;
+                                                        $bumil_periksa_ava_1_2 = $score->bumil_i_periksa_1_2_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_1_2     = round(($bumil_periksa_1_2 / $bumil_periksa_ava_1_2) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_periksa_1_2 . '%' }}
+                                               
+                                                </td>
+                                            </tr> 
+                                                      
+                                             <tr>
                                                 <td>Periksa Kehamilan 1 3</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_1_3_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_1_3 }}</td>
                                                 <td class="text-end">
-                                   
+                                                    {{ $score ? ($score->bumil_i_periksa_1_3_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_1_3 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
                                                     @php
-                                                    if ($score->bumil_i_periksa_1_3_ava != 0) {
-                                                        $periksa13 = round(($score->bumil_i_periksa_1_3/$score->bumil_i_periksa_1_3_ava) * 100);
-                                                    } else {
-                                                        $periksa13 = 0; 
-                                                    }
+                                                        $bumil_periksa_1_3     = $score->bumil_i_periksa_1_3 ?? 0;
+                                                        $bumil_periksa_ava_1_3 = $score->bumil_i_periksa_1_3_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_1_3     = round(($bumil_periksa_1_3 / $bumil_periksa_ava_1_3) * 100);  
                                                     @endphp
-
-                                                    {{ $periksa13 . '%' }}
-
+                                                    {{ $bumil_periksa_1_3 . '%' }}
+                                               
                                                 </td>
-                                            </tr>
-
-                                            <tr>
+                                            </tr> 
+                                            
+                                             <tr>
                                                 <td>Periksa Kehamilan 2</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_2_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_2 }}</td>
                                                 <td class="text-end">
-                                
-                                                    @php
-                                                    if ($score->bumil_i_periksa_2_ava != 0) {
-                                                        $periksa2 = round(($score->bumil_i_periksa_2/$score->bumil_i_periksa_2_ava) * 100);
-                                                    } else {
-                                                        $periksa2 = 0; 
-                                                    }
-                                                    @endphp
-
-                                                    {{ $periksa2 . '%' }}
-
-
+                                                    {{ $score ? ($score->bumil_i_periksa_2_ava ?? 0) : 0 }}
                                                 </td>
-                                            </tr>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_2 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
-                                            <tr>
+                                                    @php
+                                                        $bumil_periksa_2     = $score->bumil_i_periksa_2 ?? 0;
+                                                        $bumil_periksa_ava_2 = $score->bumil_i_periksa_2_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_2    = round(($bumil_periksa_2 / $bumil_periksa_ava_2) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_periksa_2 . '%' }}
+                                               
+                                                </td>
+                                            </tr> 
+                                           
+
+                                             <tr>
                                                 <td>Periksa Kehamilan 2 2</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_2_2_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_2_2 }}</td>
                                                 <td class="text-end">
-                    
-                                                    @php
-                                                    if ($score->bumil_i_periksa_2_2_ava != 0) {
-                                                        $periksa22 = round(($score->bumil_i_periksa_2_2/$score->bumil_i_periksa_2_2_ava) * 100);
-                                                    } else {
-                                                        $periksa22 = 0; 
-                                                    }
-                                                    @endphp
-
-                                                    {{ $periksa22 . '%' }}
-
-
-
+                                                    {{ $score ? ($score->bumil_i_periksa_2_2_ava ?? 0) : 0 }}
                                                 </td>
-                                            </tr>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_2_2 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
-                                            <tr>
+                                                    @php
+                                                        $bumil_periksa_2_2     = $score->bumil_i_periksa_2_2 ?? 0;
+                                                        $bumil_periksa_ava_2_2 = $score->bumil_i_periksa_2_2_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_2_2     = round(($bumil_periksa_2_2 / $bumil_periksa_ava_2_2) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_periksa_2_2 . '%' }}
+                                               
+                                                </td>
+                                            </tr> 
+            
+                                              <tr>
                                                 <td>Periksa Kehamilan 2 3</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_2_3_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_2_3 }}</td>
                                                 <td class="text-end">
-                              
-                                                    @php
-                                                    if ($score->bumil_i_periksa_2_3_ava != 0) {
-                                                        $periksa23 = round(($score->bumil_i_periksa_2_3/$score->bumil_i_periksa_2_3_ava) * 100);
-                                                    } else {
-                                                        $periksa23 = 0; 
-                                                    }
-                                                    @endphp
-
-                                                    {{ $periksa23 . '%' }}
-
-
+                                                    {{ $score ? ($score->bumil_i_periksa_2_3_ava ?? 0) : 0 }}
                                                 </td>
-                                            </tr>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_2_3 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
+                                                    @php
+                                                        $bumil_periksa_2_3     = $score->bumil_i_periksa_2_3 ?? 0;
+                                                        $bumil_periksa_ava_2_3 = $score->bumil_i_periksa_2_3_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_2_3     = round(($bumil_periksa_2_3 / $bumil_periksa_ava_2_3) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_periksa_2_3 . '%' }}
+                                               
+                                                </td>
+                                            </tr> 
 
 
-                                            <tr>
+                                              <tr>
                                                 <td>Periksa Kehamilan 3</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_3_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_3 }}</td>
                                                 <td class="text-end">
-                         
-                                                    @php
-                                                    if ($score->bumil_i_periksa_3_ava != 0) {
-                                                        $periksa3 = round(($score->bumil_i_periksa_3/$score->bumil_i_periksa_3_ava) * 100);
-                                                    } else {
-                                                        $periksa3 = 0; 
-                                                    }
-                                                    @endphp
-
-                                                    {{ $periksa3 . '%' }}
-
-
-
-
+                                                    {{ $score ? ($score->bumil_i_periksa_3_ava ?? 0) : 0 }}
                                                 </td>
-                                            </tr>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_3 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
-                                            <tr>
+                                                    @php
+                                                        $bumil_periksa_3     = $score->bumil_i_periksa_3 ?? 0;
+                                                        $bumil_periksa_ava_3 = $score->bumil_i_periksa_3_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_3     = round(($bumil_periksa_3 / $bumil_periksa_ava_3) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_periksa_3 . '%' }}
+                                               
+                                                </td>
+                                            </tr> 
+
+
+                
+                                             <tr>
                                                 <td>Periksa Kehamilan 3 2</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_3_2_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_3_2 }}</td>
                                                 <td class="text-end">
-                                  
+                                                    {{ $score ? ($score->bumil_i_periksa_3_2_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_3_2 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
                                                     @php
-                                                    if ($score->bumil_i_periksa_3_2_ava != 0) {
-                                                         $periksa32 = round(($score->bumil_i_periksa_3_2/$score->bumil_i_periksa_3_2_ava) * 100);
-                                                    } else {
-                                                        $periksa32 = 0; 
-                                                    }
+                                                        $bumil_periksa_3_2     = $score->bumil_i_periksa_3_2 ?? 0;
+                                                        $bumil_periksa_ava_3_2 = $score->bumil_i_periksa_3_2_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_3_2     = round(($bumil_periksa_3_2 / $bumil_periksa_ava_3_2) * 100);  
                                                     @endphp
-
-                                                    {{ $periksa32 . '%' }}
-
+                                                    {{ $bumil_periksa_3_2 . '%' }}
+                                               
                                                 </td>
-                                            </tr>
+                                            </tr> 
 
-                                            <tr>
+
+                                             <tr>
                                                 <td>Periksa Kehamilan 3 3</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_3_3_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_periksa_3_3 }}</td>
                                                 <td class="text-end">
-                                   
-                                                    
-                                                    @php
-                                                    if ($score->bumil_i_periksa_3_3_ava != 0) {
-                                                         $periksa33 = round(($score->bumil_i_periksa_3_3/$score->bumil_i_periksa_3_3_ava) * 100);
-                                                    } else {
-                                                        $periksa33 = 0; 
-                                                    }
-                                                    @endphp
-
-                                                    {{ $periksa33 . '%' }}
-
-
+                                                    {{ $score ? ($score->bumil_i_periksa_3_3_ava ?? 0) : 0 }}
                                                 </td>
-                                            </tr>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_periksa_3_3 ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
 
+                                                    @php
+                                                        $bumil_periksa_3_3     = $score->bumil_i_periksa_3_3 ?? 0;
+                                                        $bumil_periksa_ava_3_3 = $score->bumil_i_periksa_3_3_ava ?? 1;  // Avoid division by zero
+                                                        $bumil_periksa_3_3     = round(($bumil_periksa_3_3 / $bumil_periksa_ava_3_3) * 100);  
+                                                    @endphp
+                                                    {{ $bumil_periksa_3_3 . '%' }}
+                                               
+                                                </td>
+                                            </tr> 
+
+  
 
                                             <tr>
                                                 <td>Ibu Hamil Resiko Tinggi</td>
-                                                <td class="text-end">{{ $score->bumil_i_resti_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_resti }}</td>
                                                 <td class="text-end">
-                                        
+    
+                                                    {{ $score ? ($score->bumil_i_resti_ava ?? 0) : 0 }}
+
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_resti ?? 0) : 0 }}
+
+                                                </td>
+                                                <td class="text-end">
 
                                                     @php
-                                                    if ($score->bumil_i_resti_ava != 0) {
-                                                        $bumil_resti = round(($score->bumil_i_resti/$score->bumil_i_resti_ava) * 100);
-                                                    } else {
-                                                        $bumil_resti = 0; 
-                                                    }
+                                                        if ($score && $score->bumil_i_resti_ava != 0) {
+                                                            $bumil_resti = round(($score->bumil_i_resti / $score->bumil_i_resti_ava) * 100);
+                                                        } else {
+                                                            $bumil_resti = 0; 
+                                                        }
                                                     @endphp
 
                                                     {{ $bumil_resti . '%' }}
-
-
+ 
 
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Ibu Hamil Tambah Gizi</td>
-                                                <td class="text-end">{{ $score->bumil_i_tambah_gizi_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_tambah_gizi }}</td>
+                                                <td class="text-end">
+                                                     {{ $score ? ($score->bumil_i_tambah_gizi_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_tambah_gizi ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                             
                                                     @php
-                                                    if ($score->bumil_i_tambah_gizi_ava != 0) {
+                                                    if ($score && $score->bumil_i_tambah_gizi_ava != 0) {
                                                         $bumil_tambah_gizi = round(($score->bumil_i_tambah_gizi/$score->bumil_i_tambah_gizi_ava) * 100);
                                                     } else {
                                                         $bumil_tambah_gizi = 0; 
@@ -692,12 +798,18 @@
 
                                             <tr>
                                                 <td>Ibu Hamil TTD</td>
-                                                <td class="text-end">{{ $score->bumil_i_ttd_ava }}</td>
-                                                <td class="text-end">{{ $score->bumil_i_ttd }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_ttd_ava ?? 0) : 0 }}
+                                                    
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->bumil_i_ttd ?? 0) : 0 }}
+            
+                                                </td>
                                                 <td class="text-end">
                                              
                                                     @php
-                                                    if ($score->bumil_i_ttd_ava != 0) {
+                                                    if ($score && $score->bumil_i_ttd_ava != 0) {
                                                         $bumil_ttd = round(($score->bumil_i_ttd/$score->bumil_i_ttd_ava) * 100);
                                                     } else {
                                                         $bumil_ttd = 0; 
@@ -715,7 +827,9 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->bumil_indikasi_gizi }}
+                                    
+                                                    {{ $score ? ($score->bumil_indikasi_gizi ?? 0) : 0 }}
+
                                                 </td>
                                             </tr>
 
@@ -724,7 +838,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ number_format(floor($score->bumil_periksa_hamil_lengkap * 100) / 100, 2) }}
+                                                    {{ $score ? number_format(floor($score->bumil_periksa_hamil_lengkap * 100) / 100, 2) : '0.00' }}
+                                                    
                                                 </td>
                                             </tr>
 
@@ -733,7 +848,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ number_format(floor($score->bumil_score * 100) / 100, 2) }}
+                                                    {{ $score ? number_format(floor($score->bumil_score * 100) / 100, 2) : '0.00' }}
+                                                    
                                                 </td>
                                             </tr>
 
@@ -742,25 +858,22 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->bumil_total_pm }}
+                                                    {{ $score ? ($score->bumil_total_pm ?? 0) : 0 }}
+
                                                 </td>
                                             </tr>
 
-                                            <tr>
-                                                <td>Ibu Hamil Penerima Manfaat  </td>
-                                                <td class="text-end"></td>
-                                                <td class="text-end"></td>
-                                                <td class="text-end">
-                                                    {{ $score->bumil_total_pm }}
-                                                </td>
-                                            </tr>
+                                            
 
                                             <tr>
                                                 <td>Ibu Hamil Val  </td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->bumil_val }}
+                                                 
+                                               
+                                                    {{ $score ? number_format(floor($score->bumil_val * 100) / 100, 2) : '0.00' }}
+
                                                 </td>
                                             </tr>
 
@@ -772,17 +885,25 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"></td>
                                                 <td class="text-end">
-                                                    {{ $score->catin_ava }}
+                                                  
+                                                    {{ $score ? ($score->catin_ava ?? 0) : 0 }}
+
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Calon Pengantin Menerima Bimbingan  </td>
-                                                <td class="text-end">{{ $score->catin_i_bimbile_ava }}</td>
-                                                <td class="text-end">{{ $score->catin_i_bimbile }}</td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->catin_i_bimbile_ava ?? 0) : 0 }}
+
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->catin_i_bimbile ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+
                                                     @php
-                                                    if ($score->catin_i_bimbile_ava != 0) {
+                                                    if ($score && $score->catin_i_bimbile_ava != 0) {
                                                         $catin_bimble = round(($score->catin_i_bimbile / $score->catin_i_bimbile_ava) * 100);
                                                     } else {
                                                         $catin_bimble = 0; 
@@ -795,12 +916,18 @@
 
                                             <tr>
                                                 <td>Calon Pengantin Menerima Vaksin  </td>
-                                                <td class="text-end">{{ $score->catin_i_vaksin_ava }}</td>
-                                                <td class="text-end">{{ $score->catin_i_vaksin }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->catin_i_vaksin_ava ?? 0) : 0 }}
+                              
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->catin_i_vaksin ?? 0) : 0 }}
+                       
+                                                </td>
                                                 <td class="text-end">
 
                                                     @php
-                                                    if ($score->catin_i_vaksin_ava != 0) {
+                                                    if ($score && $score->catin_i_vaksin_ava != 0) {
                                                         $catin_vaksin = round(($score->catin_i_vaksin/$score->catin_i_vaksin_ava) * 100);
                                                     } else {
                                                         $catin_vaksin = 0; 
@@ -817,8 +944,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    
-                                                    {{ number_format(floor($score->catin_score * 100) / 100, 2) }}
+                                                    {{ $score ? number_format(floor($score->catin_score * 100) / 100, 2) : '0.00' }}
+                                                 
                                                 </td>
                                             </tr>
 
@@ -827,7 +954,7 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                     {{ $score->catin_total_pm }}
+                                                    {{ $score ? number_format(floor($score->catin_total_pm * 100) / 100, 2) : '0.00' }}
                                                 </td>
                                             </tr>
 
@@ -836,7 +963,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                     {{ $score->catin_val }}
+                                                    {{ $score ? number_format(floor($score->catin_val * 100) / 100, 2) : '0.00' }}
+
                                                 </td>
                                             </tr>
 
@@ -849,18 +977,23 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                     {{ $score->keluarga_ava }}
+                                                    {{ $score ? number_format(floor($score->keluarga_ava * 100) / 100, 2) : '0.00' }}
                                                 </td>
                                             </tr>
                                             
                                             <tr>
                                                 <td>Keluarga  </td>
-                                                <td class="text-end">{{ $score->keluarga_i_air_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_air }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_air_ava ?? 0) : 0 }}
+                                                    
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_air ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                       
                                                     @php
-                                                    if ($score->keluarga_i_air_ava != 0) {
+                                                    if ($score && $score->keluarga_i_air_ava != 0) {
                                                         $keluarga_i_air = round(($score->keluarga_i_air/$score->keluarga_i_air_ava) * 100);
                                                     } else {
                                                         $keluarga_i_air = 0; 
@@ -875,13 +1008,17 @@
 
                                             <tr>
                                                 <td>Memiliki Jamban  </td>
-                                                <td class="text-end">{{ $score->keluarga_i_jamban_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_jamban }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_jamban_ava ?? 0) : 0 }}
+                                                    
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_jamban ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                  
 
                                                     @php
-                                                    if ($score->keluarga_i_jamban_ava != 0) {
+                                                    if ($score && $score->keluarga_i_jamban_ava != 0) {
                                                         $keluarga_i_jamban = round(($score->keluarga_i_jamban/$score->keluarga_i_jamban_ava) * 100);
                                                     } else {
                                                         $keluarga_i_jamban = 0; 
@@ -895,12 +1032,16 @@
 
                                             <tr>
                                                 <td>Memiliki Jaminan Kesehatan  </td>
-                                                <td class="text-end">{{ $score->keluarga_i_jamkes_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_jamkes }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_jamkes_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_jamkes ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                           
                                                     @php
-                                                    if ($score->keluarga_i_jamkes_ava != 0) {
+                                                    if ($score && $score->keluarga_i_jamkes_ava != 0) {
                                                         $keluarga_i_jameks = round(($score->keluarga_i_jamkes/$score->keluarga_i_jamkes_ava) * 100);
                                                     } else {
                                                         $keluarga_i_jameks = 0; 
@@ -915,12 +1056,17 @@
 
                                             <tr>
                                                 <td>Memiliki Kartu Keluarga  </td>
-                                                <td class="text-end">{{ $score->keluarga_i_kk_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_kk }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_kk_ava ?? 0) : 0 }}
+                                                    
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_kk ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                               
                                                     @php
-                                                    if ($score->keluarga_i_kk_ava != 0) {
+                                                    if ($score && $score->keluarga_i_kk_ava != 0) {
                                                         $keluarga_i_kk = round(($score->keluarga_i_kk/$score->keluarga_i_kk_ava) * 100);
                                                     } else {
                                                         $keluarga_i_kk = 0; 
@@ -934,12 +1080,18 @@
 
                                               <tr>
                                                 <td>Memiliki Pembuangan Limbah  </td>
-                                                <td class="text-end">{{ $score->keluarga_i_limbah_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_limbah }} </td>
+                                                <td class="text-end">
+                                                    
+                                                    {{ $score ? ($score->keluarga_i_limbah_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                  
+                                                    {{ $score ? ($score->keluarga_i_limbah ?? 0) : 0 }} 
+                                                </td>
                                                 <td class="text-end">
                                  
                                                     @php
-                                                    if ($score->keluarga_i_limbah_ava != 0) {
+                                                    if ($score && $score->keluarga_i_limbah_ava != 0) {
                                                         $keluarga_i_limbah = round(($score->keluarga_i_limbah/$score->keluarga_i_limbah_ava) * 100);
                                                     } else {
                                                         $keluarga_i_limbah = 0; 
@@ -953,12 +1105,18 @@
 
                                              <tr>
                                                 <td>Keluarga Rentan </td>
-                                                <td class="text-end">{{ $score->keluarga_i_rentan_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_rentan }} </td>
+                                                <td class="text-end">
+                                                  
+                                                    {{ $score ? ($score->keluarga_i_rentan_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                
+                                                    {{ $score ? ($score->keluarga_i_rentan ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                                  
                                                     @php
-                                                    if ($score->keluarga_i_rentan_ava != 0) {
+                                                    if ($score && $score->keluarga_i_rentan_ava != 0) {
                                                         $keluarga_i_rentan = round(($score->keluarga_i_rentan/$score->keluarga_i_rentan_ava) * 100);
                                                     } else {
                                                         $keluarga_i_rentan = 0; 
@@ -974,12 +1132,16 @@
 
                                             <tr>
                                                 <td>Keluarga Penerima Bansos </td>
-                                                <td class="text-end">{{ $score->keluarga_i_rentan_peserta_bansos_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_rentan_peserta_bansos }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_rentan_peserta_bansos_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_rentan_peserta_bansos ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                     
                                                     @php
-                                                    if ($score->keluarga_i_rentan_peserta_bansos_ava != 0) {
+                                                    if ($score && $score->keluarga_i_rentan_peserta_bansos_ava != 0) {
                                                         $keluarga_i_bansos = round(($score->keluarga_i_rentan_peserta_bansos/$score->keluarga_i_rentan_peserta_bansos_ava) * 100);
                                                     } else {
                                                         $keluarga_i_bansos = 0; 
@@ -994,12 +1156,16 @@
 
                                             <tr>
                                                 <td>Ketahanan Pangan </td>
-                                                <td class="text-end">{{ $score->keluarga_i_tahan_pangan_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_tahan_pangan }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_tahan_pangan_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_tahan_pangan ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
 
                                                     @php
-                                                    if ($score->keluarga_i_tahan_pangan_ava != 0) {
+                                                    if ($score && $score->keluarga_i_tahan_pangan_ava != 0) {
                                                         $keluarga_i_pangan = round(($score->keluarga_i_tahan_pangan/$score->keluarga_i_tahan_pangan_ava) * 100);
                                                     } else {
                                                         $keluarga_i_pangan = 0; 
@@ -1012,13 +1178,16 @@
 
                                             <tr>
                                                 <td>Keluarga TPK </td>
-                                                <td class="text-end">{{ $score->keluarga_i_tpk_ava }}</td>
-                                                <td class="text-end">{{ $score->keluarga_i_tpk }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_tpk_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->keluarga_i_tpk ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                           
-
                                                     @php
-                                                    if ($score->keluarga_i_tpk_ava != 0) {
+                                                    if ($score && $score->keluarga_i_tpk_ava != 0) {
                                                         $keluarga_i_tpk = round(($score->keluarga_i_tpk/$score->keluarga_i_tpk_ava) * 100);
                                                     } else {
                                                         $keluarga_i_tpk = 0; 
@@ -1035,7 +1204,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ $score->keluarga_rentan_dan_beresiko }}
+                                                    
+                                                    {{ $score ? ($score->keluarga_rentan_dan_beresiko ?? 0) : 0 }}
                                                 </td>
                                             </tr>
 
@@ -1044,8 +1214,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                   
-                                                    {{ number_format(floor($score->keluarga_score * 100) / 100, 2) }}
+                                                    {{ $score ? number_format(floor($score->keluarga_score * 100) / 100, 2) : '0.00' }}
+                                                    
                                                 </td>
                                             </tr>
 
@@ -1054,7 +1224,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ $score->keluarga_total_pm }}
+                                                    {{ $score ? ($score->keluarga_total_pm ?? 0) : 0 }}
+                                                   
                                                 </td>
                                             </tr>
 
@@ -1063,7 +1234,8 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ $score->keluarga_val }}
+                                                   
+                                                    {{ $score ? ($score->keluarga_val ?? 0) : 0 }}
                                                 </td>
                                             </tr>
 
@@ -1075,19 +1247,25 @@
                                                 <td class="text-end"></td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ $score->rematri_ava }}
+                                                   
+                                                    {{ $score ? ($score->rematri_ava ?? 0) : 0 }}
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td>Remaja Putri Anemia</td>
-                                                <td class="text-end">{{ $score->rematri_i_periksa_anemia_ava }}</td>
-                                                <td class="text-end">{{ $score->rematri_i_periksa_anemia }} </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->rematri_i_periksa_anemia_ava ?? 0) : 0 }}
+                                                   
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->rematri_i_periksa_anemia ?? 0) : 0 }}
+                                                  
+                                                </td>
                                                 <td class="text-end">
                                   
-
                                                     @php
-                                                    if ($score->rematri_i_periksa_anemia_ava != 0) {
+                                                    if ($score && $score->rematri_i_periksa_anemia_ava != 0) {
                                                         $rematri_i_periksa_anemia = round(($score->rematri_i_periksa_anemia/$score->rematri_i_periksa_anemia_ava) * 100);
                                                     } else {
                                                         $rematri_i_periksa_anemia = 0; 
@@ -1101,13 +1279,16 @@
 
                                              <tr>
                                                 <td>Remaja Putri Penerima TTD </td>
-                                                <td class="text-end">{{ $score->rematri_i_ttd_ava }}</td>
-                                                <td class="text-end">{{ $score->rematri_i_ttd }}</td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->rematri_i_ttd_ava ?? 0) : 0 }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $score ? ($score->rematri_i_ttd ?? 0) : 0 }}
+                                                </td>
                                                 <td class="text-end">
                                 
-
                                                     @php
-                                                    if ($score->rematri_i_ttd_ava != 0) {
+                                                    if ($score && $score->rematri_i_ttd_ava != 0) {
                                                         $rematri_ttd = round(($score->rematri_i_ttd/$score->rematri_i_ttd_ava) * 100);
                                                     } else {
                                                         $rematri_ttd = 0; 
@@ -1124,8 +1305,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
+                                                    {{ $score ? number_format(floor($score->rematri_score * 100) / 100, 2) : '0.00' }}
                                                     
-                                                    {{ number_format(floor($score->rematri_score * 100) / 100, 2) }}
                                                 </td>
                                             </tr>
                                             
@@ -1134,8 +1315,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
+                                                    {{ $score ? ($score->rematri_total_pm ?? 0) : 0 }}
                                                     
-                                                    {{ $score->rematri_total_pm }}
                                                 </td>
                                             </tr>
 
@@ -1144,8 +1325,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    
-                                                    {{ $score->rematri_val }}
+                                                    {{ $score ? ($score->rematri_val ?? 0) : 0 }}
+                                                     
                                                 </td>
                                             </tr>
 
@@ -1154,7 +1335,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ number_format(floor($score->total * 100) / 100, 2) }}
+             
+                                                    {{ $score ? number_format(floor($score->total * 100) / 100, 2) : '0.00' }}
                                
                                                 </td>
                                             </tr>
@@ -1164,27 +1346,22 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{  $score->total_score_ava }}
+                                                   
+
+                                                    {{ $score ? ($score->total_score_ava ?? 0) : 0 }}
                                
                                                 </td>
                                             </tr>
 
-                                              <tr>
-                                                <td>Skor Total VAL</td>
-                                                <td class="text-end"> </td>
-                                                <td class="text-end"> </td>
-                                                <td class="text-end">
-                                                    {{  $score->total_score_val  }}
-                               
-                                                </td>
-                                            </tr>
+                                               
 
                                              <tr>
                                                 <td>Keluarga Rentan Val</td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ number_format(floor($score->keluarga_i_retan_val * 100) / 100, 2) }}
+                                                    
+                                                    {{ $score ? number_format(floor($score->keluarga_i_retan_val * 100) / 100, 2) : '0.00' }}
                                
                                                 </td>
                                             </tr>
@@ -1196,7 +1373,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{ number_format(floor($score->meta_apbdes_realisasi_nilai * 100) / 100, 2) }}
+                                                    
+                                                    {{ $score ? number_format(floor($score->meta_apbdes_realisasi_nilai * 100) / 100, 2) : '0.00' }}
                                
                                                 </td>
                                             </tr>
@@ -1206,7 +1384,9 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{  $score->meta_apbdes_realisasi_nilai_ket }}
+                                                    
+                                                    {{ $score ? ($score->meta_apbdes_realisasi_nilai_ket ?? 0) : 0 }}
+                                                    
                                
                                                 </td>
                                             </tr>
@@ -1216,7 +1396,9 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{  $score->pic_nik }}
+                                                     
+
+                                                     {{ $score ? ($score->pic_nik ?? 0) : '' }}
                                
                                                 </td>
                                             </tr>
@@ -1226,7 +1408,8 @@
                                                 <td class="text-end"> </td>
                                                 <td class="text-end"> </td>
                                                 <td class="text-end">
-                                                    {{  $score->pic_name}}
+                                                 
+                                                     {{ $score ? ($score->pic_name ?? 0) : '' }}
                                
                                                 </td>
                                             </tr>

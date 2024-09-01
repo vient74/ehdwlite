@@ -44,22 +44,32 @@ class Kabupaten extends Model
         ];
     }
 
+
+ 
     protected function indexKabupaten($max_data)
     {
         $sql = Kabupaten::select(
                 'master.master_kab_kota.id',
                 'master.master_kab_kota.kode_bps',
                 'master.master_kab_kota.name',
-                'master.master_kab_kota.updated_at'
+                'master.master_kab_kota.updated_at',
+                 DB::raw('count(distinct master.master_kecamatan.id)  as jumlah_kecamatan'),
+                 DB::raw('count(distinct master.master_kpm.id)  as jumlah_kpm'),
+                 DB::raw('count(distinct master.master_user.id) as jumlah_user'),
         );
+
+        $sql->leftJoin('master.master_desa', DB::raw('substring(master_desa.id, 1, 4)'), '=', 'master.master_kab_kota.id')
+            ->leftJoin('master.master_kecamatan', DB::raw('substring(master_desa.id, 1, 6)'), '=', 'master.master_kecamatan.id')
+            ->leftJoin('master.master_user', 'master.master_user.desa_id', '=', 'master.master_desa.id')
+            ->leftJoin('master.master_kpm', 'master.master_kpm.desa_id', '=', 'master.master_desa.id');
 
         if (Auth::user()->role->tag == 'admin_prov') {
              $sql->where(DB::raw("left(master_kab_kota.id, 2)"), '=', Auth::user()->provinsi_id);
         }
 
         $data =  $sql->groupBy('master_kab_kota.id', 'master.master_kab_kota.name')
-                    ->orderBy('master.master_kab_kota.id', 'ASC')
-                    ->paginate($max_data);
+                     ->orderBy('master.master_kab_kota.id', 'ASC')
+                     ->paginate($max_data);
 
         return $data;            
     }
@@ -71,7 +81,16 @@ class Kabupaten extends Model
                 'master.master_kab_kota.kode_bps',
                 'master.master_kab_kota.name',
                 'master.master_kab_kota.updated_at',
+                 DB::raw('count(distinct master.master_kecamatan.id)  as jumlah_kecamatan'),
+                 DB::raw('count(distinct master.master_kpm.id)  as jumlah_kpm'),
+                 DB::raw('count(distinct master.master_user.id) as jumlah_user'),
                  );
+
+                $sql->leftJoin('master.master_desa', DB::raw('substring(master_desa.id, 1, 4)'), '=', 'master.master_kab_kota.id')
+                    ->leftJoin('master.master_kecamatan', DB::raw('substring(master_desa.id, 1, 6)'), '=', 'master.master_kecamatan.id')
+                    ->leftJoin('master.master_user', 'master.master_user.desa_id', '=', 'master.master_desa.id')
+                    ->leftJoin('master.master_kpm', 'master.master_kpm.desa_id', '=', 'master.master_desa.id');
+
            
                 if (Auth::user()->role->tag == 'admin_prov') {
                     $sql->where(DB::raw("left(master_kab_kota.id, 2)"), '=', Auth::user()->provinsi_id);

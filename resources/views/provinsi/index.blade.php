@@ -42,7 +42,8 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Kode BPS</th>
                                 <th scope="col">Provinsi</th>
-                                <th scope="col" class="text-end">Jumlah Kecamatan</th>
+                                <th scope="col"> </th>
+                                <th scope="col" class="text-end">Jumlah Kabupaten</th>
                                 <th scope="col" class="text-end">Jumlah User eHDW(Admin Desa)</th>
                                 <th scope="col" class="text-center">Updated</th>
                                 <th scope="col" class="text-center">Action</th>
@@ -54,6 +55,7 @@
                                     <td>{{ $data->id }}</td>
                                     <td>{{ $data->kode_bps }}</td>
                                     <td>{{ $data->name }}</td>
+                                    <td class="text-center"><a href="{{ route('kabupaten.listkab', $data->id) }}">Lihat Kab/Kota</a></td>
                                     <td class="text-end">{{ $data->kabupaten }}</td>
                                     <td class="text-end">{{ $data->jumlah_user }}</td>
                                     <td class="text-center"> {{ $data->updated_at ? \Carbon\Carbon::parse($data->updated_at)->format('d-m-Y') : 'N/A' }} </td>
