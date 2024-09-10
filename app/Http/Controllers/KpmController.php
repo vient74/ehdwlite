@@ -32,7 +32,8 @@ class KpmController extends Controller
                     $kpms = $usersQuery->where("master.master_kpm.name", 'like', '' . $query . '%')
                                         ->orWhere('master.master_kpm.username', '', '' . $query . '%')
                                         ->orWhere('master.master_kpm.email', '=', '' . $query . '')
-                                        ->orWhere('master.master_kpm.username', 'like', '' . $query . '%')     
+                                        ->orWhere('master.master_kpm.id', '=', '' . $query . '')
+                                        ->orWhere('master.master_kpm.nik', '=', '' . $query . '')     
                                         ->orWhere('master.master_desa.id', '=', '' . $query . '')                     
                                         ->cursorPaginate($max_data)
                                         ->withQueryString();
