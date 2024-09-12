@@ -29,8 +29,11 @@ class MasterKkController extends Controller
         $query   = request('query');
         $kks     = MasterKk::indexKkByKpmSearch($query, $max_data);   
 
-        $jumlahKk = DB::table('master.master_meta_kk')->where('kpm_id', $query)->count();
-
+        $jumlahKk = DB::table('master.master_meta_kk')
+                    ->join('master.master_kpm','master.master_kpm.desa_id','=','master.master_meta_kk.desa_id')
+                    ->where('master.master_kpm.id', $query)
+                    ->count();
+        
         return view('masterkk.inputbykpm', compact('kks', 'jumlahKk'));
     }
 

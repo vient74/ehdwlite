@@ -58,11 +58,13 @@ class MasterKk extends Model
     protected function indexMasterKk($max_data)
     {
         return MasterKk::join('master.master_desa', 'master_meta_kk.desa_id', '=', 'master.master_desa.id')
-                ->join('master.master_kpm', 'master_meta_kk.kpm_id', '=', 'master.master_kpm.id')
-                ->select('master_meta_kk.kk', 'master.master_desa.id as kode_desa','master_meta_kk.nama_kepala_keluarga', 'master_meta_kk.rt', 'master_meta_kk.rw',
-                            'master_meta_kk.alamat', 'master_meta_kk.task_ava', 'master_meta_kk.task_val', 'master_meta_kk.created_at', 'master_meta_kk.updated_at',
-                            'master.master_desa.name as nama_desa',
-                            'master.master_kpm.name as nama_kpm')   
+                ->join('master.master_kpm', 'master_kpm.desa_id', '=', 'master.master_desa.id')
+                ->select('master_meta_kk.kk', 'master.master_desa.id as kode_desa','master_meta_kk.nama_kepala_keluarga', 
+                         'master_meta_kk.rt', 'master_meta_kk.rw',
+                         'master_meta_kk.alamat', 'master_meta_kk.task_ava', 'master_meta_kk.task_val', 
+                         'master_meta_kk.created_at', 'master_meta_kk.updated_at',
+                         'master.master_desa.name as nama_desa',
+                         'master.master_kpm.name as nama_kpm')   
                 ->orderBy('master_meta_kk.kk', 'ASC')   
                 ->cursorPaginate($max_data)
                 ->withQueryString();
@@ -74,13 +76,10 @@ class MasterKk extends Model
                             'master_meta_kk.alamat', 'master_meta_kk.task_ava', 'master_meta_kk.task_val', 'master_meta_kk.created_at', 'master_meta_kk.updated_at',
                             'master.master_desa.name as nama_desa',
                             'master.master_kpm.name as nama_kpm')  
-
                 ->join('master.master_desa', 'master_meta_kk.desa_id', '=', 'master.master_desa.id')
-                ->join('master.master_kpm', 'master_meta_kk.kpm_id', '=', 'master.master_kpm.id')
-
-        
+                ->join('master.master_kpm', 'master_desa.id', '=', 'master.master_kpm.desa_id')
                 ->where('nama_kepala_keluarga', 'like', '' . $query . '%')
-                ->orWhere('kk', $query)
+                ->orWhere('master_meta_kk.kk', $query)
                 ->orWhere('master_meta_kk.desa_id', $query)
                 ->cursorPaginate($max_data)
                 ->withQueryString();
@@ -89,14 +88,15 @@ class MasterKk extends Model
 
     protected function indexKkByKpmSearch($query, $max_data)
     {
-         return MasterKk::select('master_meta_kk.kk', 'master.master_desa.id as kode_desa','master_meta_kk.nama_kepala_keluarga', 'master_meta_kk.rt', 'master_meta_kk.rw',
-                    'master_meta_kk.alamat', 'master_meta_kk.task_ava', 'master_meta_kk.task_val', 'master_meta_kk.created_at', 'master_meta_kk.updated_at',
+         return MasterKk::select('master_meta_kk.kk', 'master.master_desa.id as kode_desa',
+                    'master_meta_kk.nama_kepala_keluarga', 'master_meta_kk.rt', 'master_meta_kk.rw',
+                    'master_meta_kk.alamat', 'master_meta_kk.task_ava', 'master_meta_kk.task_val', 
+                    'master_meta_kk.created_at', 'master_meta_kk.updated_at',
                     'master.master_desa.name as nama_desa',
                     'master.master_kpm.name as nama_kpm')   
-
-                ->leftJoin('master.master_desa', 'master_meta_kk.desa_id', '=', 'master.master_desa.id')
-                ->leftJoin('master.master_kpm', 'master_meta_kk.kpm_id', '=', 'master.master_kpm.id')
-                ->where('master.master_kpm.id',  $query)       
+                ->join('master.master_desa', 'master_desa.id', '=', 'master.master_meta_kk.desa_id')    
+                ->join('master.master_kpm', 'master_kpm.desa_id', '=', 'master.master_desa.id')
+                ->where('master.master_kpm.id',  $query)    
                 ->orderBy('master_meta_kk.kk', 'ASC')        
                 ->cursorPaginate($max_data)
                 ->withQueryString();
